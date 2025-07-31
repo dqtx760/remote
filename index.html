@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="大强远程支持 - 专业远程协助服务">
+    <title>大强远程支持 - 下载客户端</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans SC"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            DEFAULT: '#0682e3',
+                            600: '#0284c7',
+                        },
+                    },
+                    boxShadow: {
+                        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .download-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(6, 130, 227, 0.3);
+        }
+        
+        .wechat-qrcode {
+            width: 180px;
+            height: 180px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-full bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <!-- 顶部导航和主题切换 -->
+    <header class="py-6 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-laptop-code text-2xl text-blue-500"></i>
+                <h1 class="text-xl sm:text-2xl font-bold">大强远程支持</h1>
+            </div>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+                <i class="fas fa-moon dark:hidden"></i>
+                <i class="fas fa-sun hidden dark:block"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="text-center mb-8 fade-in">
+            <h2 class="text-2xl sm:text-3xl font-bold mb-3">远程技术支持</h2>
+            <p class="text-gray-600 dark:text-gray-400">
+                下载客户端，我们帮您远程解决问题
+            </p>
+        </div>
+
+        <!-- 下载卡片 -->
+        <div class="grid gap-6 sm:grid-cols-2 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 fade-in">
+                <div class="p-6">
+                    <div class="flex items-center mb-3">
+                        <div class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900 mr-3">
+                            <i class="fas fa-download text-blue-500 dark:text-blue-300 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">向日葵远程</h3>
+                    </div>
+                    <ul class="space-y-2 mb-4 text-gray-700 dark:text-gray-300 text-sm">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-0.5 mr-2 flex-shrink-0"></i>
+                            <span>支持 Windows 7/10/11</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-0.5 mr-2 flex-shrink-0"></i>
+                            <span>安全可靠的远程连接</span>
+                        </li>
+                    </ul>
+                    <a href="https://wwzq.lanzouq.com/iPnWQ3256jzg" target="_blank" class="download-btn block w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg text-center text-sm transition">
+                        立即下载 <i class="fas fa-arrow-down ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 fade-in">
+                <div class="p-6">
+                    <div class="flex items-center mb-3">
+                        <div class="p-2 rounded-lg bg-green-100 dark:bg-green-900 mr-3">
+                            <i class="fas fa-info-circle text-green-500 dark:text-green-300 text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold">使用说明</h3>
+                    </div>
+                    <div class="space-y-2 mb-4 text-gray-700 dark:text-gray-300 text-sm">
+                        <p>1. 下载并打开远程客户端</p>
+                        <p>2. 拍照发送验证码给我</p>
+                        <p>3. 等待远程连接协助</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="inline-flex items-center bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full text-sm">
+                            <i class="fas fa-headset text-blue-500 mr-2"></i>
+                            <span>微信: dqtx33</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 微信二维码 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-card p-6 mb-8 fade-in text-center">
+            <h3 class="text-lg font-bold mb-3 flex items-center justify-center">
+                <i class="fas fa-comment-dots text-green-500 mr-2"></i>
+                扫码添加微信
+            </h3>
+            <img src="https://cdnv2.ruguoapp.com/FrdaYIQXuC-t0cae0469L92edNksv3.jpg" alt="微信二维码" class="wechat-qrcode mx-auto mb-3">
+            <p class="text-sm text-gray-600 dark:text-gray-400">扫一扫或添加微信: dqtx33</p>
+        </div>
+
+        <!-- 温馨提示 -->
+        <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-xl p-4 fade-in text-sm">
+            <div class="flex items-start">
+                <i class="fas fa-lightbulb text-blue-500 dark:text-blue-300 mr-2 mt-0.5"></i>
+                <div>
+                    <h4 class="font-bold mb-1">温馨提示</h4>
+                    <p class="text-blue-800 dark:text-blue-300">请勿随意接受不明人员的远程请求，确保只与信任的技术人员共享验证码。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-500 dark:text-gray-400">
+        <p>© 2023 大强远程支持. 提供专业远程技术服务.</p>
+    </footer>
+
+    <script>
+        // 主题切换逻辑
+        const themeToggle = document.getElementById('theme-toggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        if (localStorage.getItem('color-theme') === 'dark' || (!localStorage.getItem('color-theme') && prefersDarkScheme.matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        
+        themeToggle.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+        
+        // 动画效果
+        function animateOnScroll() {
+            const animatableElements = document.querySelectorAll('.fade-in');
+            
+            animatableElements.forEach(el => {
+                const elTop = el.getBoundingClientRect().top;
+                const isVisible = elTop < window.innerHeight - 50;
+                
+                if (isVisible) {
+                    el.style.opacity = '1';
+                }
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                animateOnScroll();
+            }, 100);
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
