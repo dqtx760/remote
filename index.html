@@ -90,15 +90,26 @@
             background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
         }
 
-        /* 微信二维码容器样式 */
+        /* 微信二维码容器样式 - 修改为显示原始大小 */
         .wechat-qrcode-container {
             position: relative;
-            overflow: hidden;
-        }
-        .wechat-qrcode {
-            width: 180px;
-            height: 180px;
+            display: flex;
+            justify-content: center;
+            background: white;
+            padding: 12px;
             border-radius: 8px;
+        }
+        
+        .dark .wechat-qrcode-container {
+            background: rgba(255, 255, 255, 0.9); /* 为深色模式添加浅色背景确保二维码可见 */
+        }
+        
+        .wechat-qrcode {
+            width: auto !important;
+            height: auto !important;
+            max-width: 100%;
+            border-radius: 8px;
+            transition: opacity 0.3s;
         }
     </style>
 </head>
@@ -136,7 +147,7 @@
                         <div class="p-3 rounded-lg bg-sky-100 dark:bg-sky-900/50 mr-4">
                             <i class="fas fa-download text-primary text-xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">向日葵远程绿色版</h3>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">向日葵远程</h3>
                     </div>
                     <ul class="space-y-2.5 mb-5 text-slate-600 dark:text-slate-300 text-sm">
                         <li class="flex items-start">
@@ -178,19 +189,22 @@
             </div>
         </div>
 
-        <!-- 微信二维码 -->
+        <!-- 微信二维码（已修改为原始大小） -->
         <div class="bg-white dark:bg-slate-850 rounded-xl shadow-card card-border p-6 sm:p-8 mb-12 text-center animate-fade-in-up" style="animation-delay: 450ms;">
             <h3 class="text-lg font-bold mb-4 flex items-center justify-center text-slate-900 dark:text-white">
                 <i class="fas fa-qrcode text-primary mr-2"></i>
                 扫码添加微信好友
             </h3>
             <div class="wechat-qrcode-container mx-auto">
-                <img src="https://cdnv2.ruguoapp.com/FnF1L2xAAhZw5cBOJSte7J6GvDNev3.png?imageMogr2/auto-orient/thumbnail/304850@" alt="微信二维码" class="wechat-qrcode mx-auto mb-3">
+                <img 
+                    src="https://cdnv2.ruguoapp.com/FnF1L2xAAhZw5cBOJSte7J6GvDNev3.png" 
+                    alt="微信二维码" 
+                    class="wechat-qrcode mb-3"
+                    loading="lazy"
+                >
             </div>
             <p class="text-sm text-slate-500 dark:text-slate-400">扫一扫或搜索添加微信: <span class="font-mono">dqtx33</span></p>
         </div>
-
-    <!-- 页脚 -->
     <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800 text-center text-sm text-slate-500 dark:text-slate-400">
         <p>© 2025 大强远程支持. 提供专业、可信赖的远程技术服务.</p>
     </footer>
