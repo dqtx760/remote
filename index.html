@@ -22,7 +22,8 @@
             overflow-x: hidden;
             font-family: 'Share Tech Mono', monospace;
             background-color: #0b0b0b;
-            cursor: none;
+            /* 优化：恢复鼠标指针并设置为科技感的十字准星 */
+            cursor: crosshair;
         }
         
         #mouse-spotlight {
@@ -148,7 +149,6 @@
                 </ul>
                 
                 <div class="mt-6 pt-4 border-t border-dashed border-matrix-green/30 text-center">
-                    <!-- 优化：移除了“安全客户端”标题 -->
                     <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iivge36hqe0h" target="_blank" class="hacker-btn block w-full py-2.5 px-4 font-semibold rounded-lg text-center text-sm sound-on-click">
                         点此下载 <i class="fas fa-arrow-down ml-1"></i>
                     </a>
@@ -240,9 +240,26 @@
             });
             
             // --- 修复并优化的音效系统 ---
+            
+            // 1. 定义音效参数
             const hoverSound = [.5,,100,.01,.03,.02,4,1.5,,-4,,,,.02,,,,.5,.03];
             const clickSound = [1.01,,220,.02,.17,.2,1,1.51,,-0.2,,,,.06,,.1,.5,.09,.61];
 
+            // 2. 创建音频解锁函数
+            // 浏览器需要用户交互才能播放音频，此函数在第一次交互时激活音频系统。
+            function unlockAudio() {
+                // 播放一个几乎听不见的声音来“唤醒”音频上下文
+                zzfx(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0.01);
+                // 成功解锁后，移除监听器，确保只运行一次
+                window.removeEventListener('click', unlockAudio);
+                window.removeEventListener('mousemove', unlockAudio);
+            }
+
+            // 3. 监听第一次用户交互
+            window.addEventListener('click', unlockAudio, { once: true });
+            window.addEventListener('mousemove', unlockAudio, { once: true });
+
+            // 4. 将音效绑定到元素
             // 悬停音效
             document.querySelectorAll('.sound-on-hover').forEach(item => {
                 item.addEventListener('mouseenter', () => {
