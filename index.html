@@ -6,157 +6,52 @@
     <meta name="description" content="大强远程支持 - 专业远程协助服务">
     <title>大强同学Windows电脑远程技术支持 - 远程电脑维修</title>
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
+    <!-- ZzFX - 微型程序化音效合成器 -->
+    <script src="https://unpkg.com/zzfx@2.0.3/zzfx.js"></script>
+
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Noto Sans SC"', 'sans-serif'],
-                        'tech': ['"Share Tech Mono"', 'monospace']
-                    },
-                    colors: {
-                        primary: {
-                            DEFAULT: '#0ea5e9',
-                            600: '#0284c7',
-                        },
-                        matrix: {
-                            green: '#00ff41',
-                            dark: '#0b0b0b'
-                        }
-                    },
-                    boxShadow: {
-                        'card': '0 4px 15px -3px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.08)',
-                        'card-hover': '0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.1)',
-                        'glow-sm': '0 0 8px rgba(0, 255, 65, 0.15)',
-                        'glow-md': '0 0 16px rgba(0, 255, 65, 0.2)',
-                    }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['"Noto Sans SC"', 'sans-serif'], 'tech': ['"Share Tech Mono"', 'monospace'] }, colors: { primary: { DEFAULT: '#0ea5e9', 600: '#0284c7' }, matrix: { green: '#00ff41', dark: '#0b0b0b' } }, boxShadow: { 'card': '0 4px 15px -3px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.08)', 'card-hover': '0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.1)', 'glow-sm': '0 0 8px rgba(0, 255, 65, 0.15)', 'glow-md': '0 0 16px rgba(0, 255, 65, 0.2)' } } } };
     </script>
     
     <style>
         body {
             overflow-x: hidden;
             font-family: 'Share Tech Mono', monospace;
+            background-color: #0b0b0b;
+            cursor: none;
         }
         
-        /* 代码雨背景容器 */
+        #mouse-spotlight {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1002;
+            background: radial-gradient(circle 300px at 50% 50%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.95) 100%);
+        }
+
         #matrix-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.25;
-            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.9) 100%);
+            opacity: 0.3;
         }
         
-        /* 背景朦胧层 */
-        .matrix-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 30, 15, 0.3) 0%, rgba(0, 5, 2, 0.5) 100%);
-            z-index: -1;
-            pointer-events: none;
+        .scanlines, .glitch {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;
         }
-        
-        /* 扫描线效果 */
-        .scanlines {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(0, 255, 65, 0.03) 0%,
-                rgba(0, 0, 0, 0) 2px
-            );
-            background-size: 100% 4px;
-            z-index: 1000;
-            pointer-events: none;
-            animation: scanline 10s linear infinite;
-        }
-        
-        @keyframes scanline {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 100%; }
-        }
-        
-        /* 电子干扰效果 */
-        .glitch {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi+P//PwMDAwOEAQRjRkYQAQYABK8A7Q5sS1MAAAAASUVORK5CYII=');
-            opacity: 0.06;
-            z-index: 1001;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-            animation: glitch 1s infinite alternate;
-        }
-        
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-1px, 1px); }
-            40% { transform: translate(1px, -1px); }
-            60% { transform: translate(-1px, 1px); }
-            80% { transform: translate(1px, -1px); }
-            100% { transform: translate(0); }
-        }
-        
-        /* Header 扫光动画 */
-        .header-container {
-            position: relative;
-            overflow: hidden; /* 隐藏超出边界的伪元素 */
-        }
+        .scanlines { background: linear-gradient(to bottom, rgba(0, 255, 65, 0.03) 0%, rgba(0, 0, 0, 0) 2px); background-size: 100% 4px; animation: scanline 10s linear infinite; }
+        .glitch { background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi+P//PwMDAwOEAQRjRkYQAQYABK8A7Q5sS1MAAAAASUVORK5CYII='); opacity: 0.06; mix-blend-mode: overlay; animation: glitch 1s infinite alternate; }
+        @keyframes scanline { to { background-position: 0 100%; } }
+        @keyframes glitch { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(2px, -2px); } 60% { transform: translate(-2px, 1px); } 80% { transform: translate(1px, -2px); } }
 
-        .header-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.35), transparent);
-            transform: skewX(-45deg); /* 倾斜光效，使其更有动感 */
-            transition: 0s;
-        }
-
-        .header-container.scanning::after {
-            animation: scan-glow 0.8s ease-in-out;
-        }
-
-        @keyframes scan-glow {
-            0% {
-                left: -100%;
-            }
-            100% {
-                left: 100%;
-            }
-        }
-        
-        /* 其他卡片样式 */
         .hacker-card {
             background: rgba(11, 11, 11, 0.8);
             border: 1px solid rgba(0, 255, 65, 0.3);
@@ -165,66 +60,27 @@
             transition: all 0.3s ease;
         }
         
-        .hacker-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(0, 255, 65, 0.1),
-                transparent
-            );
-            transition: all 1s ease;
-        }
-        
-        .hacker-card:hover::before {
-            left: 100%;
-        }
-        
         .hacker-card:hover {
-            box-shadow: 0 0 15px rgba(0, 255, 65, 0.5);
-            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+            transform: translateY(-8px);
+            border-color: rgba(0, 255, 65, 0.7);
         }
-        
-        .hacker-btn {
-            background: transparent;
-            border: 1px solid #00ff41;
-            color: #00ff41;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hacker-btn:hover {
-            background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
-            color: white;
-        }
-        
-        .hacker-btn::before {
+
+        .hacker-card::before, .hacker-card::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
+            width: 0;
+            height: 2px;
+            background-image: linear-gradient(90deg, transparent, var(--tw-shadow-color, #00ff41));
+            box-shadow: 0 0 10px 1px #00ff41;
+            transition: width 0.4s ease-out;
+        }
+        .hacker-card::before { top: 0; right: 0; }
+        .hacker-card::after { bottom: 0; left: 0; }
+        .hacker-card:hover::before, .hacker-card:hover::after {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(0, 255, 65, 0.4),
-                transparent
-            );
-            transition: all 0.6s ease;
         }
-        
-        .hacker-btn:hover::before {
-            left: 100%;
-        }
-        
+
         .terminal-text {
             font-family: 'Share Tech Mono', monospace;
             color: #00ff41;
@@ -235,199 +91,170 @@
             position: relative;
             z-index: 10;
         }
+
+        .hacker-btn {
+            background: transparent;
+            border: 1px solid #00ff41;
+            color: #00ff41;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .hacker-btn:hover {
+            background: rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+            color: white;
+        }
     </style>
 </head>
-<body class="min-h-full bg-matrix-dark text-matrix-green overflow-x-hidden">
-    <!-- 代码雨背景 -->
+<body class="min-h-full bg-matrix-dark text-matrix-green">
+    <div id="mouse-spotlight"></div>
     <div id="matrix-container"></div>
-    
-    <!-- 背景朦胧层 -->
-    <div class="matrix-overlay"></div>
-    
-    <!-- 扫描线效果 -->
     <div class="scanlines"></div>
-    
-    <!-- 电子干扰效果 -->
     <div class="glitch"></div>
     
-    <!-- 顶部导航 -->
-    <!-- 新增：添加 header-container 类以应用扫光效果 -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-lg bg-matrix-dark/90 border-b border-matrix-green/20 header-container">
-        <div class="max-w-3xl mx-auto flex justify-between items-center py-6 px-4 sm:px-6 lg:px-8">
+    <header class="sticky top-0 z-40 w-full backdrop-blur-lg bg-matrix-dark/90 border-b border-matrix-green/20">
+        <div class="max-w-3xl mx-auto flex justify-between items-center py-5 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center space-x-3 terminal-text">
                 <i class="fas fa-laptop-code text-2xl"></i>
-                <h1 class="text-2xl sm:text-3xl font-bold">大强远程支持</h1>
+                <h1 class="text-xl sm:text-2xl font-bold decrypt-text">大强远程支持</h1>
             </div>
             <div class="flex items-center space-x-5">
                 <div class="flex space-x-5 -ml-3">
-                    <a href="http://114.66.61.131:23391" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text">
-                        <i class="fas fa-hdd mr-1"></i> 粉丝网盘
-                    </a>
-                    <a href="https://xodnytdcaw.feishu.cn/wiki/ZOeHwecXHihm0fkgdzcck8TCnPb?fromScene=spaceOverview" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text">
-                        <i class="fas fa-list mr-1"></i> 服务项目
-                    </a>
-                    <a href="https://github.com/dqtx760/remote" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text">
-                        <i class="fas fa-book-open mr-1"></i> 更新日志
-                    </a>
+                    <a href="http://114.66.61.131:23391" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text"><i class="fas fa-hdd mr-1"></i> 粉丝网盘</a>
+                    <a href="https://xodnytdcaw.feishu.cn/wiki/ZOeHwecXHihm0fkgdzcck8TCnPb?fromScene=spaceOverview" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text"><i class="fas fa-list mr-1"></i> 服务项目</a>
+                    <a href="https://github.com/dqtx760/remote" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text"><i class="fas fa-book-open mr-1"></i> 更新日志</a>
                 </div>
-                <!-- 触发扫光动画的按钮 -->
-                <button id="theme-toggle" class="p-2 ml-2 rounded-full hover:bg-matrix-green/10 transition terminal-text">
-                    <i class="fas fa-code-branch text-xl"></i>
-                </button>
+                <button id="theme-toggle" class="p-2 ml-2 rounded-full hover:bg-matrix-green/10 transition terminal-text"><i class="fas fa-code-branch text-xl"></i></button>
             </div>
         </div>
     </header>
 
-    <!-- 主内容区 -->
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-12 content-container">
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 content-container">
         <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4 terminal-text">专业、安全的远程技术支持</h2>
-            <p class="max-w-xl mx-auto terminal-text opacity-80">
-                只需下载客户端，我们将通过远程连接，为您快速、高效地解决电脑问题。
-            </p>
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4 terminal-text decrypt-text">专业、安全的远程技术支持</h2>
+            <p class="max-w-xl mx-auto terminal-text opacity-80 decrypt-text">只需下载客户端，我们将通过远程连接，为您快速、高效地解决电脑问题。</p>
         </div>
 
-        <!-- 下载卡片 -->
         <div class="grid gap-8 sm:grid-cols-2 mb-12">
-            <!-- RustDesk卡片 -->
-            <div class="hacker-card rounded-xl p-6 hover:shadow-glow-md">
+            <div class="hacker-card rounded-xl p-6 sound-on-hover">
                 <div class="flex items-center mb-4">
-                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4">
-                        <i class="fas fa-download text-matrix-green text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold terminal-text">RustDesk远程</h3>
+                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"> <i class="fas fa-download text-matrix-green text-xl"></i> </div>
+                    <h3 class="text-lg font-bold terminal-text decrypt-text">RustDesk远程</h3>
                 </div>
                 <ul class="space-y-2.5 mb-5 text-matrix-green/80 text-sm">
-                    <li class="flex items-start">
-                        <i class="fas fa-check-circle text-matrix-green mt-0.5 mr-2 flex-shrink-0"></i>
-                        <span>支持Windows7/10/11及更高版本</span>
-                    </li>
-                    <li class="flex items-start">
-                        <i class="fas fa-shield-halved text-matrix-green mt-0.5 mr-2 flex-shrink-0"></i>
-                        <span>全程安全加密，隐私无忧</span>
-                    </li>
+                    <li class="flex items-start decrypt-text"><i class="fas fa-check-circle text-matrix-green mt-0.5 mr-2"></i><span>支持Windows7/10/11及更高版本</span></li>
+                    <li class="flex items-start decrypt-text"><i class="fas fa-shield-halved text-matrix-green mt-0.5 mr-2"></i><span>全程安全加密，隐私无忧</span></li>
                 </ul>
-                <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iivge36hqe0h" target="_blank" class="hacker-btn block w-full py-2.5 px-4 font-semibold rounded-lg text-center text-sm">
-                    点此下载 <i class="fas fa-arrow-down ml-1"></i>
-                </a>
+                
+                <div class="mt-6 pt-4 border-t border-dashed border-matrix-green/30 text-center">
+                    <!-- 优化：移除了“安全客户端”标题 -->
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iivge36hqe0h" target="_blank" class="hacker-btn block w-full py-2.5 px-4 font-semibold rounded-lg text-center text-sm sound-on-click">
+                        点此下载 <i class="fas fa-arrow-down ml-1"></i>
+                    </a>
+                </div>
             </div>
             
-            <!-- 使用说明卡片 -->
-            <div class="hacker-card rounded-xl p-6 hover:shadow-glow-md">
+            <div class="hacker-card rounded-xl p-6 sound-on-hover">
                 <div class="flex items-center mb-4">
-                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4">
-                        <i class="fas fa-info-circle text-matrix-green text-xl"></i>
-                    </div>
-                    <h3 class="text-lg font-bold terminal-text">使用指南</h3>
+                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"> <i class="fas fa-info-circle text-matrix-green text-xl"></i> </div>
+                    <h3 class="text-lg font-bold terminal-text decrypt-text">使用指南</h3>
                 </div>
                 <div class="space-y-2.5 mb-5 text-matrix-green/80 text-sm">
-                    <p><span class="font-bold mr-2">1.</span>下载软件</p>
-                    <p><span class="font-bold mr-2">2.</span>将ID拍照发给客服</p>
-                    <p><span class="font-bold mr-2">3.</span>等待远程协助您</p>
+                    <p class="decrypt-text"><span class="font-bold mr-2">1.</span>下载软件</p>
+                    <p class="decrypt-text"><span class="font-bold mr-2">2.</span>将ID拍照发给客服</p>
+                    <p class="decrypt-text"><span class="font-bold mr-2">3.</span>等待远程协助您</p>
                 </div>
                 <div class="text-center">
-                    <div class="inline-flex items-center bg-matrix-green/10 px-4 py-1.5 rounded-full text-sm terminal-text">
-                        <i class="fab fa-weixin text-matrix-green mr-2"></i>
-                        <span class="font-medium">微信: dqtx33</span>
-                    </div>
+                    <div class="inline-flex items-center bg-matrix-green/10 px-4 py-1.5 rounded-full text-sm terminal-text"><i class="fab fa-weixin text-matrix-green mr-2"></i><span class="font-medium">微信: dqtx33</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- 微信二维码 -->
-        <div class="hacker-card rounded-xl p-6 sm:p-8 mb-8 text-center">
-            <h3 class="text-lg font-bold mb-4 flex items-center justify-center terminal-text">
-                <i class="fas fa-qrcode text-matrix-green mr-2"></i>
-                温馨提示：手机扫码添加博主微信
-            </h3>
-            <div class="wechat-qrcode-container mx-auto">
-                <img 
-                    src="https://cdnv2.ruguoapp.com/Fnq9Or--TU9w7YBZDzd7u__D78XVv3.png" 
-                    alt="微信二维码" 
-                    class="wechat-qrcode mb-3"
-                    loading="lazy"
-                >
-            </div>
+        <div class="hacker-card rounded-xl p-6 sm:p-8 mb-8 text-center sound-on-hover">
+            <h3 class="text-lg font-bold mb-4 flex items-center justify-center terminal-text decrypt-text"><i class="fas fa-qrcode mr-2"></i> 温馨提示：手机扫码添加博主微信</h3>
+            <div class="mx-auto"><img src="https://cdnv2.ruguoapp.com/Fnq9Or--TU9w7YBZDzd7u__D78XVv3.png" alt="微信二维码" class="mb-3" loading="lazy"></div>
         </div>
     </main>
     <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-matrix-green/20 text-center text-sm terminal-text opacity-70">
-        <p>© 2025 大强远程支持. 提供专业、可信赖的远程技术服务！</p>
+        <p class="decrypt-text">© 2025 大强远程支持. 提供专业、可信赖的远程技术服务！</p>
     </footer>
 
-    <!-- 代码雨动画 -->
     <script>
-        const matrixContainer = document.getElementById('matrix-container');
         const canvas = document.createElement('canvas');
-        canvas.style.width = '100%';
-        canvas.style.height = '100%';
-        matrixContainer.appendChild(canvas);
-        
+        document.getElementById('matrix-container').appendChild(canvas);
         const ctx = canvas.getContext('2d');
+        let cols, drops;
+        const chars = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ01';
+        const fontSize = 16;
         
-        function resizeCanvas() {
+        function setupMatrix() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        
-        const chars = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const fontSize = 16;
-        const columns = Math.floor(canvas.width / fontSize);
-        
-        const drops = [];
-        for (let i = 0; i < columns; i++) {
-            drops[i] = Math.random() * -100;
+            cols = Math.floor(canvas.width / fontSize);
+            drops = Array(cols).fill(1).map(() => Math.floor(Math.random() * canvas.height));
         }
         
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
             ctx.fillStyle = '#00ff41';
-            ctx.font = `${fontSize}px 'Share Tech Mono', monospace`;
-            
-            for (let i = 0; i < drops.length; i++) {
+            ctx.font = `${fontSize}px 'Share Tech Mono'`;
+            for(let i = 0; i < drops.length; i++) {
                 const text = chars[Math.floor(Math.random() * chars.length)];
-                const x = i * fontSize;
-                const y = drops[i] * fontSize;
-                
-                ctx.fillText(text, x, y);
-                
-                if (y > canvas.height && Math.random() > 0.99) {
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
                     drops[i] = 0;
                 }
-                drops[i] += 0.5;
+                drops[i]++;
             }
         }
         
-        function animate() {
-            drawMatrix();
-            requestAnimationFrame(animate);
-        }
-        
-        animate();
-    </script>
-    
-    <!-- 新增：扫光效果的触发脚本 -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('theme-toggle');
-            const header = document.querySelector('.header-container');
+        window.addEventListener('resize', setupMatrix);
+        setupMatrix();
+        setInterval(drawMatrix, 33);
 
-            themeToggle.addEventListener('click', () => {
-                // 如果正在播放动画，则先重置
-                if (header.classList.contains('scanning')) {
-                    header.classList.remove('scanning');
-                    // void header.offsetWidth; // 强制浏览器重绘，确保动画可以重新开始
-                }
-                // 添加class来触发动画
-                header.classList.add('scanning');
+        document.addEventListener('DOMContentLoaded', () => {
+            const spotlight = document.getElementById('mouse-spotlight');
+            window.addEventListener('mousemove', e => {
+                spotlight.style.background = `radial-gradient(circle 300px at ${e.clientX}px ${e.clientY}px, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.95) 100%)`;
             });
 
-            // 监听动画结束事件，结束后移除class，以便下次点击可以再次触发
-            header.addEventListener('animationend', () => {
-                header.classList.remove('scanning');
+            const decryptElements = document.querySelectorAll('.decrypt-text');
+            const randomChars = '`¡™£¢∞§¶•ªº–≠⁄€‹›ﬁﬂ‡°·‚—±!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            decryptElements.forEach(el => {
+                const originalText = el.textContent.trim();
+                let iteration = 0;
+                const interval = setInterval(() => {
+                    el.textContent = originalText.split('')
+                        .map((char, index) => {
+                            if(index < iteration) return originalText[index];
+                            if(char === ' ') return ' ';
+                            return randomChars[Math.floor(Math.random() * randomChars.length)];
+                        })
+                        .join('');
+                    if(iteration >= originalText.length) clearInterval(interval);
+                    iteration += 1 / 3;
+                }, 30);
+            });
+            
+            // --- 修复并优化的音效系统 ---
+            const hoverSound = [.5,,100,.01,.03,.02,4,1.5,,-4,,,,.02,,,,.5,.03];
+            const clickSound = [1.01,,220,.02,.17,.2,1,1.51,,-0.2,,,,.06,,.1,.5,.09,.61];
+
+            // 悬停音效
+            document.querySelectorAll('.sound-on-hover').forEach(item => {
+                item.addEventListener('mouseenter', () => {
+                    zzfx(...hoverSound);
+                });
+            });
+
+            // 点击音效
+            document.querySelectorAll('.sound-on-click').forEach(item => {
+                item.addEventListener('click', () => {
+                    zzfx(...clickSound);
+                });
             });
         });
     </script>
