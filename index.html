@@ -18,9 +18,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
-    <!-- 代码雨动画库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -57,7 +54,7 @@
             font-family: 'Share Tech Mono', monospace;
         }
         
-        /* 代码雨背景容器 - 添加蒙版效果 */
+        /* 代码雨背景容器 */
         #matrix-container {
             position: fixed;
             top: 0;
@@ -65,8 +62,8 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.3;
-            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.1));
+            opacity: 0.25;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.9) 100%);
         }
         
         /* 背景朦胧层 */
@@ -76,12 +73,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(0, 30, 15, 0.2) 0%, rgba(0, 5, 2, 0.4) 100%);
+            background: linear-gradient(135deg, rgba(0, 30, 15, 0.3) 0%, rgba(0, 5, 2, 0.5) 100%);
             z-index: -1;
             pointer-events: none;
         }
         
-        /* 终端扫描线效果 */
+        /* 扫描线效果 */
         .scanlines {
             position: fixed;
             top: 0;
@@ -96,7 +93,7 @@
             background-size: 100% 4px;
             z-index: 1000;
             pointer-events: none;
-            animation: scanline 8s linear infinite;
+            animation: scanline 10s linear infinite;
         }
         
         @keyframes scanline {
@@ -116,19 +113,50 @@
             z-index: 1001;
             pointer-events: none;
             mix-blend-mode: overlay;
-            animation: glitch 0.5s infinite alternate;
+            animation: glitch 1s infinite alternate;
         }
         
         @keyframes glitch {
             0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(2px, -2px); }
-            60% { transform: translate(-2px, 2px); }
-            80% { transform: translate(2px, -2px); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(1px, -1px); }
+            60% { transform: translate(-1px, 1px); }
+            80% { transform: translate(1px, -1px); }
             100% { transform: translate(0); }
         }
         
-        /* 黑客美学卡片样式 */
+        /* Header 扫光动画 */
+        .header-container {
+            position: relative;
+            overflow: hidden; /* 隐藏超出边界的伪元素 */
+        }
+
+        .header-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.35), transparent);
+            transform: skewX(-45deg); /* 倾斜光效，使其更有动感 */
+            transition: 0s;
+        }
+
+        .header-container.scanning::after {
+            animation: scan-glow 0.8s ease-in-out;
+        }
+
+        @keyframes scan-glow {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+        
+        /* 其他卡片样式 */
         .hacker-card {
             background: rgba(11, 11, 11, 0.8);
             border: 1px solid rgba(0, 255, 65, 0.3);
@@ -162,7 +190,6 @@
             transform: translateY(-5px);
         }
         
-        /* 黑客风格按钮 */
         .hacker-btn {
             background: transparent;
             border: 1px solid #00ff41;
@@ -198,63 +225,15 @@
             left: 100%;
         }
         
-        /* 终端样式文本 */
         .terminal-text {
             font-family: 'Share Tech Mono', monospace;
             color: #00ff41;
             text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
         }
         
-        /* 内容区域确保不被遮挡 */
         .content-container {
             position: relative;
             z-index: 10;
-            background: rgba(11, 11, 11, 0.7);
-        }
-        
-        /* 链接下划线效果 */
-        .underline-links {
-            text-align: center;
-            margin: 30px auto;
-            font-family: 'Share Tech Mono', monospace;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .underline-links a {
-            color: #00ff41;
-            text-decoration: none;
-            position: relative;
-            padding-bottom: 3px;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-        }
-        
-        .underline-links a:hover {
-            opacity: 1;
-        }
-        
-        .underline-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 1px;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #00ff41;
-            transition: width 0.3s ease;
-        }
-        
-        .underline-links a:hover::after {
-            width: 100%;
-        }
-        
-        .separator {
-            color: rgba(0, 255, 65, 0.4);
-            pointer-events: none;
         }
     </style>
 </head>
@@ -272,14 +251,14 @@
     <div class="glitch"></div>
     
     <!-- 顶部导航 -->
-    <header class="sticky top-0 z-40 w-full backdrop-blur-lg bg-matrix-dark/90 border-b border-matrix-green/20">
-        <div class="max-w-3xl mx-auto flex justify-between items-center py-5 px-4 sm:px-6 lg:px-8">
+    <!-- 新增：添加 header-container 类以应用扫光效果 -->
+    <header class="sticky top-0 z-40 w-full backdrop-blur-lg bg-matrix-dark/90 border-b border-matrix-green/20 header-container">
+        <div class="max-w-3xl mx-auto flex justify-between items-center py-6 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center space-x-3 terminal-text">
                 <i class="fas fa-laptop-code text-2xl"></i>
-                <h1 class="text-xl sm:text-2xl font-bold">大强远程支持</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold">大强远程支持</h1>
             </div>
             <div class="flex items-center space-x-5">
-                <!-- 三个超链接（使用图标并向左移动） -->
                 <div class="flex space-x-5 -ml-3">
                     <a href="http://114.66.61.131:23391" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text">
                         <i class="fas fa-hdd mr-1"></i> 粉丝网盘
@@ -291,7 +270,7 @@
                         <i class="fas fa-book-open mr-1"></i> 更新日志
                     </a>
                 </div>
-                <!-- 黑客风格图标（终端） -->
+                <!-- 触发扫光动画的按钮 -->
                 <button id="theme-toggle" class="p-2 ml-2 rounded-full hover:bg-matrix-green/10 transition terminal-text">
                     <i class="fas fa-code-branch text-xl"></i>
                 </button>
@@ -300,7 +279,7 @@
     </header>
 
     <!-- 主内容区 -->
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 content-container">
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-12 content-container">
         <div class="text-center mb-12">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4 terminal-text">专业、安全的远程技术支持</h2>
             <p class="max-w-xl mx-auto terminal-text opacity-80">
@@ -370,17 +349,6 @@
                 >
             </div>
         </div>
-        
-        <!-- 加入链接部分 -->
-        <div class="underline-links terminal-text">
-            <a href="https://dqtx.cc/">导航</a>
-            <span class="separator">|</span>
-            <a href="http://114.66.61.131:23391/%E8%BF%9C%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%8C%85">云盘</a>
-            <span class="separator">|</span>
-            <a href="https://discreet-ringer-ef6.notion.site/Derek-Zhao-1a5351994e4080e79edcda09672ef592">Notion</a>
-            <span class="separator">|</span>
-            <a href="https://coke.buyzur.com/#/register?code=L2FOV7Yb">Cokecloud</a>
-        </div>
     </main>
     <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-matrix-green/20 text-center text-sm terminal-text opacity-70">
         <p>© 2025 大强远程支持. 提供专业、可信赖的远程技术服务！</p>
@@ -388,19 +356,80 @@
 
     <!-- 代码雨动画 -->
     <script>
-        // 代码雨动画
-        const matrixCanvas = document.createElement('canvas');
-        matrixCanvas.id = 'matrix-canvas';
-        document.getElementById('matrix-container').appendChild(matrixCanvas);
+        const matrixContainer = document.getElementById('matrix-container');
+        const canvas = document.createElement('canvas');
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        matrixContainer.appendChild(canvas);
         
-        const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         
-        // 设置画布尺寸
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
+        window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
         
-        const katakana = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳ
+        const chars = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const fontSize = 16;
+        const columns = Math.floor(canvas.width / fontSize);
+        
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#00ff41';
+            ctx.font = `${fontSize}px 'Share Tech Mono', monospace`;
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                const x = i * fontSize;
+                const y = drops[i] * fontSize;
+                
+                ctx.fillText(text, x, y);
+                
+                if (y > canvas.height && Math.random() > 0.99) {
+                    drops[i] = 0;
+                }
+                drops[i] += 0.5;
+            }
+        }
+        
+        function animate() {
+            drawMatrix();
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    </script>
+    
+    <!-- 新增：扫光效果的触发脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const header = document.querySelector('.header-container');
+
+            themeToggle.addEventListener('click', () => {
+                // 如果正在播放动画，则先重置
+                if (header.classList.contains('scanning')) {
+                    header.classList.remove('scanning');
+                    // void header.offsetWidth; // 强制浏览器重绘，确保动画可以重新开始
+                }
+                // 添加class来触发动画
+                header.classList.add('scanning');
+            });
+
+            // 监听动画结束事件，结束后移除class，以便下次点击可以再次触发
+            header.addEventListener('animationend', () => {
+                header.classList.remove('scanning');
+            });
+        });
+    </script>
+</body>
+</html>
