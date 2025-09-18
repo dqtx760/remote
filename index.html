@@ -12,6 +12,9 @@
     <!-- Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
@@ -39,7 +42,7 @@
                     },
                     boxShadow: {
                         'card': '0 4px 15px -3px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.08)',
-                        'card-hover': '0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, ơ1)',
+                        'card-hover': '0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.1)',
                         'glow-sm': '0 0 8px rgba(0, 255, 65, 0.15)',
                         'glow-md': '0 0 16px rgba(0, 255, 65, 0.2)',
                     }
@@ -275,9 +278,24 @@
                 <i class="fas fa-laptop-code text-2xl"></i>
                 <h1 class="text-xl sm:text-2xl font-bold">大强远程支持</h1>
             </div>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-matrix-green/10 transition terminal-text">
-                <i class="fas fa-moon"></i>
-            </button>
+            <div class="flex items-center space-x-5">
+                <!-- 三个超链接（使用图标并向左移动） -->
+                <div class="flex space-x-5 -ml-3">
+                    <a href="http://114.66.61.131:23391" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text">
+                        <i class="fas fa-hdd mr-1"></i> 粉丝网盘
+                    </a>
+                    <a href="https://xodnytdcaw.feishu.cn/wiki/ZOeHwecXHihm0fkgdzcck8TCnPb?fromScene=spaceOverview" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text">
+                        <i class="fas fa-list mr-1"></i> 服务项目
+                    </a>
+                    <a href="https://github.com/dqtx760/remote" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text">
+                        <i class="fas fa-book-open mr-1"></i> 更新日志
+                    </a>
+                </div>
+                <!-- 黑客风格图标（终端） -->
+                <button id="theme-toggle" class="p-2 ml-2 rounded-full hover:bg-matrix-green/10 transition terminal-text">
+                    <i class="fas fa-code-branch text-xl"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -385,29 +403,4 @@
         }
         resizeCanvas();
         
-        const katakana = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
-        const symbols = '!@#$%^&*()_+-=[]{};:\'"\\|,.<>/?';
-        
-        const alphabet = katakana + latin + nums + symbols;
-        
-        const fontSize = 16;
-        const columns = Math.floor(canvas.width / fontSize);
-        
-        const rainDrops = [];
-        
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = Math.random() * -100;
-            
-            if (Math.random() > 0.8) {
-                rainDrops[x] = -Math.random() * 50;
-            }
-        }
-        
-        const matrixColors = [
-            'rgba(0, 255, 65, 0.4)',
-            'rgba(0, 255, 65, 0.3)'
-        ];
-
-        function drawMatrixRain
+        const katakana = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳ
