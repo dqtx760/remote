@@ -29,15 +29,18 @@
         #background-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.35;
-            filter: blur(1px);
+            /* 【修改点1】降低不透明度，让代码雨更隐约 */
+            opacity: 0.25;
+            /* 【修改点2】增加模糊度，提升朦胧感 */
+            filter: blur(1.5px);
         }
         
         .scanlines, .glitch {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;
         }
         .scanlines { background: linear-gradient(to bottom, rgba(0, 255, 65, 0.03) 0%, transparent 2px); background-size: 100% 4px; animation: scanline 10s linear infinite; }
-        .glitch { background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi+P//PwMDAwOEAQRjRkYQAQYABK8A7Q5sS1MAAAAASUVORK5CYII='); opacity: 0.06; mix-blend-mode: overlay; animation: glitch 1s infinite alternate; }
+        /* 【修改点3】稍微增强干扰效果 */
+        .glitch { background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi+P//PwMDAwOEAQRjRkYQAQYABK8A7Q5sS1MAAAAASUVORK5CYII='); opacity: 0.08; mix-blend-mode: overlay; animation: glitch 1s infinite alternate; }
         @keyframes scanline { to { background-position: 0 100%; } }
         @keyframes glitch { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(2px, -2px); } 60% { transform: translate(-2px, 1px); } 80% { transform: translate(1px, -2px); } }
 
