@@ -22,7 +22,8 @@
             overflow-x: hidden;
             font-family: 'Share Tech Mono', monospace;
             background-color: #0b0b0b;
-            cursor: crosshair;
+            /* 优化：移除此行以恢复默认鼠标指针 */
+            /* cursor: crosshair; */
         }
 
         #background-canvas {
@@ -30,8 +31,6 @@
             z-index: -1;
             opacity: 0.35;
             filter: blur(1px);
-            /* 优化：移除此行以实现均匀背景 */
-            /* mask-image: radial-gradient(ellipse at center, black 50%, transparent 85%); */
         }
         
         .scanlines, .glitch {
@@ -69,7 +68,7 @@
             background: transparent; border: 1px solid #00ff41; color: #00ff41;
             transition: all 0.3s ease; position: relative; overflow: hidden;
         }
-        .hacker-btn:hover { background: rgba(0， 255, 65, 0.1); box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); color: white; }
+        .hacker-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); color: white; }
         
         #main-header {
             position: relative;
@@ -77,7 +76,7 @@
         }
         #main-header::after {
             content: ''; position: absolute; top: 0; left: -60%; width: 60%; height: 100%;
-            background: linear-gradient(90deg， transparent， rgba(0， 255， 65, 0.35), transparent);
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.35), transparent);
             transform: skewX(-45deg); transition: none; z-index: 1; pointer-events: none; opacity: 0;
         }
         #main-header.scanning::after {
@@ -98,10 +97,10 @@
     <div class="glitch"></div>
     
     <header id="main-header" class="sticky top-0 z-40 w-full backdrop-blur-lg bg-matrix-dark/90 border-b border-matrix-green/20">
-        <div class="max-w-3xl mx-auto flex justify-between items-center py-5 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto flex justify-between items-center py-6 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center space-x-3 terminal-text">
                 <i class="fas fa-laptop-code text-2xl"></i>
-                <h1 class="text-xl sm:text-2xl font-bold decrypt-text">大强远程支持</h1>
+                <h1 class="text-xl sm:text-2xl font-bold">大强远程支持</h1>
             </div>
             <div class="flex items-center space-x-5">
                 <div class="flex space-x-5 -ml-3">
@@ -139,7 +138,6 @@
             
             <div class="hacker-card rounded-xl p-6">
                 <div class="flex items-center mb-4">
-                    <!-- 优化：更换为更高级的图标 -->
                     <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"> <i class="fas fa-clipboard-list text-matrix-green text-xl"></i> </div>
                     <h3 class="text-lg font-bold terminal-text decrypt-text">使用指南</h3>
                 </div>
