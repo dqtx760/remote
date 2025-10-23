@@ -22,16 +22,12 @@
             overflow-x: hidden;
             font-family: 'Share Tech Mono', monospace;
             background-color: #0b0b0b;
-            /* 优化：移除此行以恢复默认鼠标指针 */
-            /* cursor: crosshair; */
         }
 
         #background-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            /* 【修改点1】降低不透明度，让代码雨更隐约 */
             opacity: 0.25;
-            /* 【修改点2】增加模糊度，提升朦胧感 */
             filter: blur(1.5px);
         }
         
@@ -39,7 +35,6 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;
         }
         .scanlines { background: linear-gradient(to bottom, rgba(0, 255, 65, 0.03) 0%, transparent 2px); background-size: 100% 4px; animation: scanline 10s linear infinite; }
-        /* 【修改点3】稍微增强干扰效果 */
         .glitch { background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi+P//PwMDAwOEAQRjRkYQAQYABK8A7Q5sS1MAAAAASUVORK5CYII='); opacity: 0.08; mix-blend-mode: overlay; animation: glitch 1s infinite alternate; }
         @keyframes scanline { to { background-position: 0 100%; } }
         @keyframes glitch { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(2px, -2px); } 60% { transform: translate(-2px, 1px); } 80% { transform: translate(1px, -2px); } }
@@ -73,6 +68,13 @@
         }
         .hacker-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); color: white; }
         
+        .hacker-btn.primary {
+             background: rgba(0, 255, 65, 0.15);
+        }
+        .hacker-btn.primary:hover {
+             background: rgba(0, 255, 65, 0.3);
+        }
+
         #main-header {
             position: relative;
             overflow: hidden;
@@ -92,6 +94,37 @@
             100% { left: 25%; opacity: 0; }
         }
 
+        /* Modal Styles */
+        #qr-modal.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #qr-modal.visible #modal-content {
+            transform: scale(1);
+        }
+        
+        /* Toast Notification */
+        #toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(11, 11, 11, 0.9);
+            border: 1px solid rgba(0, 255, 65, 0.5);
+            color: #00ff41;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease, top 0.3s ease;
+            pointer-events: none;
+        }
+        #toast-notification.show {
+            opacity: 1;
+            top: 40px;
+        }
+
     </style>
 </head>
 <body class="min-h-full bg-matrix-dark text-matrix-green">
@@ -103,7 +136,6 @@
         <div class="max-w-3xl mx-auto flex justify-between items-center py-5 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center space-x-3 terminal-text">
                 <i class="fas fa-laptop-code text-2xl"></i>
-                <!-- 优化：更换字体、减小字号 -->
                 <h1 class="text-xl sm:text-2xl font-bold font-sans">大强远程支持</h1>
             </div>
             <div class="flex items-center space-x-5">
@@ -151,21 +183,169 @@
                     <p class="decrypt-text"><span class="font-bold mr-2">3.</span>等待远程协助您</p>
                 </div>
                 <div class="text-center">
-                    <div class="inline-flex items-center bg-matrix-green/10 px-4 py-1.5 rounded-full text-sm terminal-text"><i class="fab fa-weixin text-matrix-green mr-2"></i><span class="font-medium">微信: dqtx33</span></div>
+                    <div id="personal-wechat-trigger" class="inline-flex items-center bg-matrix-green/10 px-4 py-1.5 rounded-full text-sm terminal-text cursor-pointer hover:bg-matrix-green/20 transition"><i class="fab fa-weixin text-matrix-green mr-2"></i><span class="font-medium">点此复制微信号</span></div>
                 </div>
             </div>
         </div>
+        
+        <!-- My AI Works Section -->
+        <div class="text-center mb-12 mt-16">
+            <h2 class="text-2xl sm:text-3xl font-bold terminal-text decrypt-text">我的 AI 作品</h2>
+        </div>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+            <!-- 电视喵 -->
+            <a href="https://tv.dqtx.cc/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fas fa-tv text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">电视喵</h3>
+                <p class="text-sm text-matrix-green/80">TV应用导航站</p>
+            </a>
+            <!-- 大强导航 -->
+            <a href="https://123.dqtx.cc/#" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fas fa-compass text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">大强导航</h3>
+                <p class="text-sm text-matrix-green/80">优质网站推荐</p>
+            </a>
+            <!-- 密码生成器 -->
+            <a href="https://key.dqtx.cc/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fas fa-key text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">密码生成器</h3>
+                <p class="text-sm text-matrix-green/80">一个密码生成器</p>
+            </a>
+            <!-- 计算器 -->
+            <a href="https://jsq.dqtx.cc/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fas fa-calculator text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">计算器</h3>
+                <p class="text-sm text-matrix-green/80">一个在线计算器</p>
+            </a>
+        </div>
 
-        <div class="hacker-card rounded-xl p-6 sm:p-8 mb-8 text-center">
-            <h3 class="text-lg font-bold mb-4 flex items-center justify-center terminal-text decrypt-text"><i class="fas fa-qrcode mr-2"></i> 温馨提示：手机扫码添加博主微信</h3>
-            <div class="mx-auto"><img src="https://cdnv2.ruguoapp.com/Fnq9Or--TU9w7YBZDzd7u__D78XVv3.png" alt="微信二维码" class="mb-3" loading="lazy"></div>
+
+        <!-- Social Media Section -->
+        <div class="text-center mb-12 mt-16">
+            <h2 class="text-2xl sm:text-3xl font-bold terminal-text decrypt-text">我的社交媒体</h2>
+        </div>
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+            <!-- WeChat Public Account Card -->
+            <div id="wechat-public-trigger" class="hacker-card rounded-xl p-6 text-center cursor-pointer">
+                <div class="mb-4"><i class="fab fa-weixin text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">微信公众号</h3>
+                <p class="text-sm text-matrix-green/80">大强同学</p>
+            </div>
+            
+            <!-- Twitter Card -->
+            <a href="https://x.com/dqtx760" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fab fa-twitter text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">Twitter / X</h3>
+                <p class="text-sm text-matrix-green/80">@dqtx760</p>
+            </a>
+
+            <!-- GitHub Card -->
+            <a href="https://github.com/dqtx760" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fab fa-github text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">GitHub</h3>
+                <p class="text-sm text-matrix-green/80">dqtx760</p>
+            </a>
+
+            <!-- Jike Card -->
+            <a href="https://web.okjike.com/u/24236868-c3e9-49ef-ab93-93a60e1a25db" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fas fa-hashtag text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">即刻</h3>
+                <p class="text-sm text-matrix-green/80">大强同学</p>
+            </a>
+
+            <!-- Weibo Card -->
+            <a href="https://weibo.com/u/3488818185" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fab fa-weibo text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">微博</h3>
+                <p class="text-sm text-matrix-green/80">大强同学</p>
+            </a>
+            
+            <!-- CSDN Card -->
+            <a href="https://blog.csdn.net/2402_82616859?type=blog" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fas fa-blog text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">CSDN</h3>
+                <p class="text-sm text-matrix-green/80">大强同学</p>
+            </a>
+
+            <!-- Douyin Card -->
+            <a href="https://www.douyin.com/user/self?from_tab_name=main" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fab fa-tiktok text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">抖音</h3>
+                <p class="text-sm text-matrix-green/80">大强同学</p>
+            </a>
+
+            <!-- Xiaohongshu Card -->
+            <a href="https://xhslink.com/m/FmNz8HvIPH" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fas fa-book-open text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">小红书</h3>
+                <p class="text-sm text-matrix-green/80">大强同学</p>
+            </a>
+
+            <!-- Bilibili Card -->
+            <a href="https://space.bilibili.com/491358682/upload/video" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
+                <div class="mb-4"><i class="fab fa-bilibili text-3xl terminal-text"></i></div>
+                <h3 class="text-lg font-bold terminal-text mb-2">B站</h3>
+                <p class="text-sm text-matrix-green/80">大强同学</p>
+            </a>
         </div>
     </main>
+
     <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-matrix-green/20 text-center text-sm terminal-text opacity-70">
         <p class="decrypt-text">© 2025 大强远程支持. 提供专业、可信赖的远程技术服务！</p>
     </footer>
 
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="fixed inset-0 bg-matrix-dark/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div id="modal-content" class="hacker-card rounded-xl p-6 sm:p-8 text-center max-w-xs w-full transition-transform duration-300 scale-95" style="transform: scale(0.95);">
+            <h3 id="modal-title" class="text-lg font-bold mb-4 flex items-center justify-center terminal-text"></h3>
+            <div class="mx-auto"><img id="modal-image" src="" alt="QR Code" class="mb-3 bg-white p-2 rounded-lg" loading="lazy"></div>
+            <p id="modal-description" class="text-sm terminal-text opacity-70 mb-5"></p>
+            <div class="flex items-center justify-center gap-4">
+                <button id="modal-copy-button" class="hacker-btn inline-block py-2 px-5 font-semibold rounded-lg text-sm">复制微信号</button>
+                <button id="modal-close-button" class="hacker-btn primary inline-block py-2 px-5 font-semibold rounded-lg text-sm">关闭</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast-notification"></div>
+
     <script>
+        // --- Clipboard & Toast Logic ---
+        function showToast(message) {
+            const toast = document.getElementById('toast-notification');
+            if (!toast) return;
+            
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        async function copyToClipboard(text) {
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = text;
+                    textArea.style.position = "fixed";
+                    textArea.style.opacity = "0";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(textArea);
+                }
+                showToast("已复制到剪贴板！");
+            } catch (error) {
+                console.error("复制失败:", error);
+                showToast("复制失败，请手动复制。");
+            }
+        }
+
+
         document.addEventListener('DOMContentLoaded', () => {
             // --- 纯绿色代码雨脚本 ---
             const canvas = document.getElementById('background-canvas');
@@ -238,20 +418,90 @@
 
             const downloadButton = document.getElementById('download-button');
             const dingSound = [,,523.25,.02,.02,.1,2,.1,,-0.1,,,,,.1,,.02,.13,.01];
-            downloadButton.addEventListener('click', () => {
-                if (isAudioUnlocked) zzfx(...dingSound);
-            });
+            if (downloadButton) {
+                downloadButton.addEventListener('click', () => {
+                    if (isAudioUnlocked) zzfx(...dingSound);
+                });
+            }
             
             const scanButton = document.getElementById('scan-trigger-button');
             const header = document.getElementById('main-header');
             const scanSound = [1.5,.5,250,.03,.1,.2,1,1.5,,,,,.2,,.1,,.8,.05]; 
 
-            scanButton.addEventListener('click', () => {
-                if (isAudioUnlocked) zzfx(...scanSound);
-                header.classList.remove('scanning');
-                void header.offsetWidth;
-                header.classList.add('scanning');
+            if(scanButton && header) {
+                scanButton.addEventListener('click', () => {
+                    if (isAudioUnlocked) zzfx(...scanSound);
+                    header.classList.remove('scanning');
+                    void header.offsetWidth;
+                    header.classList.add('scanning');
+                });
+            }
+
+            // --- QR Code Modal Logic ---
+            const modal = document.getElementById('qr-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const modalImage = document.getElementById('modal-image');
+            const modalDescription = document.getElementById('modal-description');
+            const modalCloseButton = document.getElementById('modal-close-button');
+            const modalCopyButton = document.getElementById('modal-copy-button');
+
+            function showQrModal(title, imageUrl, description, copyText = null) {
+                modalTitle.textContent = title;
+                modalImage.src = imageUrl;
+                modalImage.alt = title;
+                modalDescription.textContent = description;
+
+                if (copyText) {
+                    modalCopyButton.style.display = 'inline-block';
+                    modalCopyButton.dataset.copyText = copyText;
+                } else {
+                    modalCopyButton.style.display = 'none';
+                }
+
+                modal.classList.add('visible');
+            }
+
+            function hideQrModal() {
+                modal.classList.remove('visible');
+            }
+
+            modalCloseButton。addEventListener('click', hideQrModal);
+            modal.addEventListener('click', (e) => {
+                if (!modalContent.contains(e.target)) {
+                    hideQrModal();
+                }
             });
+            modalCopyButton.addEventListener('click', () => {
+                const textToCopy = modalCopyButton.dataset.copyText;
+                if (textToCopy) {
+                    copyToClipboard(textToCopy);
+                }
+            });
+
+            // --- Trigger Listeners ---
+            const personalWechatTrigger = document.getElementById('personal-wechat-trigger');
+            if (personalWechatTrigger) {
+                personalWechatTrigger.addEventListener('click', () => {
+                    showQrModal(
+                        '博主微信', 
+                        'https://gitee.com/da-qiang-classmate/typora/raw/master/image/e3877f44-ceca-4ded-86b5-1a0a15c7927b.webp', 
+                        '微信号: dqtx33',
+                        'dqtx33'
+                    );
+                });
+            }
+
+            const wechatPublicTrigger = document.getElementById('wechat-public-trigger');
+            if (wechatPublicTrigger) {
+                wechatPublicTrigger.addEventListener('click', () => {
+                    showQrModal(
+                        '微信公众号', 
+                        'https://gitee.com/da-qiang-classmate/typora/raw/master/image/687df59c-f85e-4a5f-ab35-cf86112e87fd.webp', 
+                        '扫码关注「大强同学」'
+                    );
+                });
+            }
         });
     </script>
 </body>
