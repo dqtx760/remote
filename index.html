@@ -224,7 +224,7 @@
         <div class="text-center mb-12 mt-16">
             <h2 class="text-2xl sm:text-3xl font-bold terminal-text decrypt-text">我的社交媒体</h2>
         </div>
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 mb-12">
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-12">
             <!-- WeChat Public Account Card -->
             <div id="wechat-public-trigger" class="hacker-card rounded-xl p-6 text-center cursor-pointer">
                 <div class="mb-4"><i class="fab fa-weixin text-3xl terminal-text"></i></div>
@@ -235,7 +235,7 @@
             <!-- Twitter Card -->
             <a href="https://x.com/dqtx760" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
                 <div class="mb-4"><i class="fab fa-twitter text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">Twitter / X</h3>
+                <h3 class="text-lg font-bold terminal-text mb-2">Twitter</h3>
                 <p class="text-sm text-matrix-green/80">@dqtx760</p>
             </a>
 
@@ -253,13 +253,6 @@
                 <p class="text-sm text-matrix-green/80">大强同学</p>
             </a>
 
-            <!-- Weibo Card -->
-            <a href="https://weibo.com/u/3488818185" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fab fa-weibo text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">微博</h3>
-                <p class="text-sm text-matrix-green/80">大强同学</p>
-            </a>
-            
             <!-- CSDN Card -->
             <a href="https://blog.csdn.net/2402_82616859?type=blog" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
                 <div class="mb-4"><i class="fas fa-blog text-3xl terminal-text"></i></div>
@@ -466,7 +459,7 @@
                 modal.classList.remove('visible');
             }
 
-            modalCloseButton。addEventListener('click', hideQrModal);
+            modalCloseButton.addEventListener('click', hideQrModal);
             modal.addEventListener('click', (e) => {
                 if (!modalContent.contains(e.target)) {
                     hideQrModal();
