@@ -133,7 +133,7 @@
     <div class="glitch"></div>
     
     <header id="main-header" class="sticky top-0 z-40 w-full backdrop-blur-lg bg-matrix-dark/90 border-b border-matrix-green/20">
-        <div class="max-w-3xl mx-auto flex justify-between items-center py-5 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-5xl mx-auto flex justify-between items-center py-5 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center space-x-3 terminal-text">
                 <i class="fas fa-laptop-code text-2xl"></i>
                 <h1 class="text-xl sm:text-2xl font-bold font-sans">大强远程支持</h1>
@@ -149,7 +149,7 @@
         </div>
     </header>
 
-    <main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 content-container">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 content-container">
         <div class="text-center mb-12">
             <h2 class="text-3xl sm:text-4xl font-bold mb-4 terminal-text decrypt-text">专业、安全的远程技术支持</h2>
             <p class="max-w-xl mx-auto terminal-text opacity-80 decrypt-text">只需下载客户端，我们将通过远程连接，为您快速、高效地解决电脑问题。</p>
@@ -188,37 +188,82 @@
             </div>
         </div>
         
-        <!-- My AI Works Section -->
         <div class="text-center mb-12 mt-16">
-            <h2 class="text-2xl sm:text-3xl font-bold terminal-text decrypt-text">我的 AI 作品</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold terminal-text decrypt-text">实用工具</h2>
         </div>
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-12">
-            <!-- 电视喵 -->
-            <a href="https://tv.dqtx.cc/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fas fa-tv text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">电视喵</h3>
-                <p class="text-sm text-matrix-green/80">TV应用导航站</p>
-            </a>
-            <!-- 大强导航 -->
-            <a href="https://123.dqtx.cc/#" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fas fa-compass text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">大强导航</h3>
-                <p class="text-sm text-matrix-green/80">优质网站推荐</p>
-            </a>
-            <!-- 密码生成器 -->
-            <a href="https://key.dqtx.cc/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fas fa-key text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">密码生成器</h3>
-                <p class="text-sm text-matrix-green/80">一个密码生成器</p>
-            </a>
-            <!-- 计算器 -->
-            <a href="https://jsq.dqtx.cc/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fas fa-calculator text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">计算器</h3>
-                <p class="text-sm text-matrix-green/80">一个在线计算器</p>
-            </a>
-        </div>
+        <div class="grid gap-8 sm:grid-cols-1 lg:grid-cols-3 mb-12">
+            
+            <!-- 信息查询 -->
+            <div class="hacker-card rounded-xl p-6 flex flex-col">
+                <h3 class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"><i class="fas fa-info-circle text-matrix-green text-xl"></i></div>
+                    <span class="text-lg font-bold terminal-text">信息查询</span>
+                </h3>
+                <div class="flex flex-col flex-grow justify-between gap-y-2.5">
+                    <a href="ms-settings:about" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅系统信息</a>
+                    <a href="ms-settings:themes" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅主题设置</a>
+                    <a href="ms-settings:network-proxy" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅代理设置</a>
+                    <a href="ms-settings:storagesense" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅储存感知</a>
+                    <a href="ms-settings:recovery" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅恢复选项</a>
+                </div>
+            </div>
 
+            <!-- 常用软件 -->
+            <div class="hacker-card rounded-xl p-6 flex flex-col">
+                <h3 class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"><i class="fas fa-folder-open text-matrix-green text-xl"></i></div>
+                    <span class="text-lg font-bold terminal-text">常用软件</span>
+                </h3>
+                <div class="flex flex-col flex-grow justify-between gap-y-2.5">
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iG5A6371g9cj" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
+                        <img src="https://img.shields.io/badge/解压软件-点此下载-00A1E9?logo=feishu" alt="解压软件">
+                    </a>
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iLHZK371f3kf" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
+                        <img src="https://img.shields.io/badge/卸载软件-点此下载-00A1E9?logo=feishu" alt="卸载软件">
+                    </a>
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iXnjY1ykoo5e" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
+                        <img src="https://img.shields.io/badge/小箭头去除-点此下载-00A1E9?logo=feishu" alt="小箭头去除">
+                    </a>
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iNZOo320ywyb" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
+                        <img src="https://img.shields.io/badge/win11右键-点此下载-00A1E9?logo=feishu" alt="win11右键">
+                    </a>
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/ijEfZ3aqkhuh" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
+                        <img src="https://img.shields.io/badge/Hosts修改-点此下载-00A1E9?logo=feishu" alt="Hosts修改">
+                    </a>
+                </div>
+            </div>
+
+            <!-- 常用命令 -->
+            <div class="hacker-card rounded-xl p-6 flex flex-col">
+                <h3 class="flex items-center mb-4">
+                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"><i class="fas fa-terminal text-matrix-green text-xl"></i></div>
+                    <span class="text-lg font-bold terminal-text">常用命令</span>
+                </h3>
+                <div class="flex flex-col flex-grow justify-between gap-y-2.5">
+                    <div class="flex items-center gap-2">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">sysdm.cpl</div>
+                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm">复制</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">diskmgmt.msc</div>
+                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm">复制</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">powercfg.cpl</div>
+                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm">复制</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">msconfig</div>
+                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm">复制</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">irm https://get.activated.win | iex</div>
+                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm">复制</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
         <!-- Social Media Section -->
         <div class="text-center mb-12 mt-16">
@@ -430,6 +475,20 @@
                 });
             }
 
+            // --- Logic for "实用工具" Copy Buttons ---
+            document.querySelectorAll('.new-copy-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    // We need the full text for copying, which is stored in a data attribute
+                    const textToCopy = button.previousElementSibling.textContent.trim();
+                    if (textToCopy === 'irm https://get.activated.win |...') {
+                         copyToClipboard('irm https://get.activated.win | iex');
+                    } else {
+                         copyToClipboard(textToCopy);
+                    }
+                    if (isAudioUnlocked) zzfx(...dingSound);
+                });
+            });
+            
             // --- QR Code Modal Logic ---
             const modal = document.getElementById('qr-modal');
             const modalContent = document.getElementById('modal-content');
