@@ -8,259 +8,278 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
-    <!-- ZzFX - 微型程序化音效合成器 -->
+    <!-- 优化重点：预加载二维码图片，解决点击后延迟显示的问题 -->
+    <link rel="preload" as="image" href="https://gitee.com/da-qiang-classmate/typora/raw/master/image/e3877f44-ceca-4ded-86b5-1a0a15c7927b.webp">
+    <link rel="preload" as="image" href="https://gitee.com/da-qiang-classmate/typora/raw/master/image/687df59c-f85e-4a5f-ab35-cf86112e87fd.webp">
+    
     <script src="https://unpkg.com/zzfx@2.0.3/zzfx.js"></script>
 
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['"Noto Sans SC"', 'sans-serif'], 'tech': ['"Share Tech Mono"', 'monospace'] }, colors: { primary: { DEFAULT: '#0ea5e9', 600: '#0284c7' }, matrix: { green: '#00ff41', dark: '#0b0b0b' } }, boxShadow: { 'card': '0 4px 15px -3px rgba(0, 0, 0, 0.1), 0 2px 8px -2px rgba(0, 0, 0, 0.08)', 'card-hover': '0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 4px 10px -4px rgba(0, 0, 0, 0.1)', 'glow-sm': '0 0 8px rgba(0, 255, 65, 0.15)', 'glow-md': '0 0 16px rgba(0, 255, 65, 0.2)' } } } };
+        tailwind.config = { 
+            darkMode: 'class', 
+            theme: { 
+                extend: { 
+                    fontFamily: { 
+                        sans: ['"Noto Sans SC"', 'sans-serif'], 
+                        'tech': ['"JetBrains Mono"', '"Share Tech Mono"', 'monospace'] 
+                    }, 
+                    colors: { 
+                        primary: { DEFAULT: '#33ff00', 600: '#2bd600' }, 
+                        matrix: { green: '#33ff00', dark: '#0a0a0a', muted: '#1f521f' } 
+                    }, 
+                    boxShadow: { 
+                        'glow-sm': '0 0 10px rgba(51, 255, 0, 0.2)', 
+                    } 
+                } 
+            } 
+        };
     </script>
     
     <style>
         body {
             overflow-x: hidden;
-            font-family: 'Share Tech Mono', monospace;
-            background-color: #0b0b0b;
+            font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
+            background-color: #0a0a0a;
+            color: #33ff00;
         }
 
+        /* 静态网格背景 */
         #background-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.25;
-            filter: blur(1.5px);
+            opacity: 0.3; 
         }
         
-        .scanlines, .glitch {
+        .scanlines {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 3px, 3px 100%;
         }
-        .scanlines { background: linear-gradient(to bottom, rgba(0, 255, 65, 0.03) 0%, transparent 2px); background-size: 100% 4px; animation: scanline 10s linear infinite; }
-        .glitch { background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi+P//PwMDAwOEAQRjRkYQAQYABK8A7Q5sS1MAAAAASUVORK5CYII='); opacity: 0.08; mix-blend-mode: overlay; animation: glitch 1s infinite alternate; }
-        @keyframes scanline { to { background-position: 0 100%; } }
-        @keyframes glitch { 0%, 100% { transform: translate(0, 0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(2px, -2px); } 60% { transform: translate(-2px, 1px); } 80% { transform: translate(1px, -2px); } }
 
+        /* 卡片风格 */
         .hacker-card {
-            background: rgba(11, 11, 11, 0.8);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            position: relative; overflow: hidden; transition: all 0.3s ease;
+            background: rgba(15, 15, 15, 0.85);
+            border: 1px solid rgba(51, 255, 0, 0.2);
+            position: relative; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(5px);
         }
-        
         .hacker-card:hover {
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
-            transform: translateY(-8px);
-            border-color: rgba(0, 255, 65, 0.7);
+            border-color: rgba(51, 255, 0, 0.6);
+            box-shadow: 0 0 20px rgba(51, 255, 0, 0.15);
+            transform: translateY(-2px);
         }
 
-        .hacker-card::before, .hacker-card::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            background-image: linear-gradient(90deg, transparent, var(--tw-shadow-color, #00ff41));
-            box-shadow: 0 0 10px 1px #00ff41; transition: width 0.4s ease-out;
+        .terminal-text { 
+            color: #33ff00; 
+            text-shadow: 0 0 4px rgba(51, 255, 0, 0.3);
         }
-        .hacker-card::before { top: 0; right: 0; }
-        .hacker-card::after { bottom: 0; left: 0; }
-        .hacker-card:hover::before, .hacker-card:hover::after { width: 100%; }
-
-        .terminal-text { color: #00ff41; text-shadow: 0 0 5px rgba(0, 255, 65, 0.5); }
-        .content-container { position: relative; z-index: 10; }
-        .hacker-btn {
-            background: transparent; border: 1px solid #00ff41; color: #00ff41;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
-        }
-        .hacker-btn:hover { background: rgba(0, 255, 65, 0.1); box-shadow: 0 0 10px rgba(0, 255, 65, 0.5); color: white; }
         
-        .hacker-btn.primary {
-             background: rgba(0, 255, 65, 0.15);
+        .content-container { position: relative; z-index: 10; }
+        
+        .hacker-btn {
+            background: transparent; 
+            border: 1px solid #33ff00; 
+            color: #33ff00;
+            transition: all 0.2s ease; 
+            position: relative; 
+            overflow: hidden;
+            font-weight: 600;
         }
-        .hacker-btn.primary:hover {
-             background: rgba(0, 255, 65, 0.3);
+        .hacker-btn:hover { 
+            background: #33ff00; 
+            color: #000000; 
+            box-shadow: 0 0 15px rgba(51, 255, 0, 0.4);
         }
 
+        /* Header 透明背景 */
         #main-header {
-            position: relative;
-            overflow: hidden;
-        }
-        #main-header::after {
-            content: ''; position: absolute; top: 0; left: -60%; width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.35), transparent);
-            transform: skewX(-45deg); transition: none; z-index: 1; pointer-events: none; opacity: 0;
-        }
-        #main-header.scanning::after {
-            opacity: 1;
-            animation: scan-and-fade 1.8s ease-out;
-        }
-        @keyframes scan-and-fade {
-            0% { left: -60%; opacity: 1; }
-            70% { left: 25%; opacity: 1; }
-            100% { left: 25%; opacity: 0; }
+            background: transparent; 
+            backdrop-filter: blur(6px); 
+            border-bottom: 1px solid rgba(51, 255, 0, 0.08); 
         }
 
         /* Modal Styles */
-        #qr-modal.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #qr-modal.visible #modal-content {
-            transform: scale(1);
-        }
+        #qr-modal.visible { opacity: 1; pointer-events: auto; }
+        #qr-modal.visible #modal-content { transform: scale(1); }
         
-        /* Toast Notification */
+        /* Toast */
         #toast-notification {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 10px 20px;
-            border-radius: 8px;
-            background: rgba(11, 11, 11, 0.9);
-            border: 1px solid rgba(0, 255, 65, 0.5);
-            color: #00ff41;
-            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
-            z-index: 9999;
-            opacity: 0;
-            transition: opacity 0.3s ease, top 0.3s ease;
-            pointer-events: none;
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            padding: 10px 20px; background: #0a0a0a; border: 1px solid #33ff00; color: #33ff00; border-radius: 8px; z-index: 9999;
+            opacity: 0; transition: opacity 0.3s ease, top 0.3s ease; pointer-events: none; box-shadow: 0 0 15px rgba(51, 255, 0, 0.2);
         }
-        #toast-notification.show {
-            opacity: 1;
-            top: 40px;
-        }
+        #toast-notification.show { opacity: 1; top: 40px; }
 
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #1f521f; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #33ff00; }
+        
+        /* 软件徽章 Hover */
+        .software-badge {
+            transition: transform 0.2s ease, filter 0.2s ease;
+            filter: drop-shadow(0 0 0 transparent);
+            /* 保持 display: block 以便控制宽度 */
+            display: inline-block; 
+        }
+        .software-badge:hover {
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 5px rgba(51, 255, 0, 0.3));
+        }
     </style>
 </head>
 <body class="min-h-full bg-matrix-dark text-matrix-green">
     <canvas id="background-canvas"></canvas>
     <div class="scanlines"></div>
-    <div class="glitch"></div>
     
-    <header id="main-header" class="sticky top-0 z-40 w-full backdrop-blur-lg bg-matrix-dark/90 border-b border-matrix-green/20">
-        <div class="max-w-5xl mx-auto flex justify-between items-center py-5 px-4 sm:px-6 lg:px-8">
+    <header id="main-header" class="sticky top-0 z-40 w-full">
+        <div class="max-w-5xl mx-auto flex justify-between items-center py-4 px-4 sm:px-6 lg:px-8">
             <div class="flex items-center space-x-3 terminal-text">
                 <i class="fas fa-laptop-code text-2xl"></i>
-                <h1 class="text-xl sm:text-2xl font-bold font-sans">大强远程支持</h1>
+                <h1 class="text-xl sm:text-2xl font-bold font-sans tracking-wide">大强远程支持</h1>
             </div>
             <div class="flex items-center space-x-5">
-                <div class="flex space-x-5 -ml-3">
-                    <a href="http://114.66.61.130:9329/%E8%BF%9C%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%8C%85" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text"><i class="fas fa-hdd mr-1"></i> 粉丝网盘</a>
-                    <a href="http://app.dqtx.cc/" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text"><i class="fas fa-list mr-1"></i> 服务项目</a>
-                    <a href="https://github.com/dqtx760/remote" target="_blank" class="text-base font-bold hover:text-matrix-green transition terminal-text"><i class="fas fa-book-open mr-1"></i> 更新日志</a>
+                <div class="flex space-x-6 -ml-3">
+                    <a href="http://114.66.61.130:9329/%E8%BF%9C%E7%A8%8B%E5%B7%A5%E5%85%B7%E5%8C%85" target="_blank" class="text-base font-bold hover:text-white transition terminal-text relative group">
+                        <i class="fas fa-hdd mr-1"></i> 粉丝网盘
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-matrix-green transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="http://app.dqtx.cc/" target="_blank" class="text-base font-bold hover:text-white transition terminal-text relative group">
+                        <i class="fas fa-list mr-1"></i> 服务项目
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-matrix-green transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="https://github.com/dqtx760/remote" target="_blank" class="text-base font-bold hover:text-white transition terminal-text relative group">
+                        <i class="fas fa-book-open mr-1"></i> 更新日志
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-matrix-green transition-all group-hover:w-full"></span>
+                    </a>
                 </div>
-                <button id="scan-trigger-button" class="p-2 ml-2 rounded-full hover:bg-matrix-green/10 transition terminal-text"><i class="fas fa-code-branch text-xl"></i></button>
+                <button id="scan-trigger-button" class="p-2 ml-2 rounded-full hover:bg-matrix-green/20 transition terminal-text"><i class="fas fa-code-branch text-xl"></i></button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 content-container">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-4 terminal-text decrypt-text">专业、安全的远程技术支持</h2>
-            <p class="max-w-xl mx-auto terminal-text opacity-80 decrypt-text">只需下载客户端，我们将通过远程连接，为您快速、高效地解决电脑问题。</p>
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 content-container">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-3 terminal-text font-sans">专业、安全的远程技术支持</h2>
+            <p class="max-w-xl mx-auto terminal-text opacity-70">只需下载客户端，我们将通过远程连接，为您快速、高效地解决电脑问题。</p>
         </div>
 
-        <div class="grid gap-8 sm:grid-cols-2 mb-12">
+        <div class="grid gap-6 sm:grid-cols-2 mb-10">
             <div class="hacker-card rounded-xl p-6">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"> <i class="fas fa-download text-matrix-green text-xl"></i> </div>
-                    <h3 class="text-lg font-bold terminal-text decrypt-text">RustDesk远程</h3>
+                <div class="flex items-center mb-4 border-b border-matrix-muted/50 pb-3">
+                    <div class="mr-4"> <i class="fas fa-download text-matrix-green text-xl"></i> </div>
+                    <h3 class="text-lg font-bold terminal-text">RustDesk远程</h3>
                 </div>
-                <ul class="space-y-2.5 mb-5 text-matrix-green/80 text-sm">
-                    <li class="flex items-start decrypt-text"><i class="fas fa-check-circle text-matrix-green mt-0.5 mr-2"></i><span>支持Windows7/10/11及更高版本</span></li>
-                    <li class="flex items-start decrypt-text"><i class="fas fa-shield-halved text-matrix-green mt-0.5 mr-2"></i><span>全程安全加密，隐私无忧</span></li>
+                <ul class="space-y-3 mb-6 text-matrix-green/80 text-sm">
+                    <li class="flex items-start"><i class="fas fa-check-circle text-matrix-green mt-0.5 mr-2"></i><span>支持Windows7/10/11及更高版本</span></li>
+                    <li class="flex items-start"><i class="fas fa-shield-halved text-matrix-green mt-0.5 mr-2"></i><span>全程安全加密，隐私无忧</span></li>
                 </ul>
-                <div class="mt-6 pt-4 border-t border-dashed border-matrix-green/30 text-center">
-                    <a href="https://lz.qaiu.top/parser?url=https://wwbxq.lanzouq.com/iB4pV3a15fbg" target="_blank" id="download-button" class="hacker-btn inline-block py-2.5 px-6 font-semibold rounded-lg text-sm" style="transform: translateX(-15px);">
-                        下载 <i class="fas fa-arrow-down ml-1"></i>
+                <div class="mt-4 pt-2 text-center">
+                    <a href="https://lz.qaiu.top/parser?url=https://wwbxq.lanzouq.com/iB4pV3a15fbg" target="_blank" id="download-button" class="hacker-btn rounded-lg inline-block py-2.5 px-8 text-sm w-full sm:w-auto hover:scale-105 transform transition">
+                        立即下载 <i class="fas fa-arrow-down ml-1"></i>
                     </a>
                 </div>
             </div>
             
             <div class="hacker-card rounded-xl p-6">
-                <div class="flex items-center mb-4">
-                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"> <i class="fas fa-clipboard-list text-matrix-green text-xl"></i> </div>
-                    <h3 class="text-lg font-bold terminal-text decrypt-text">使用指南</h3>
+                <div class="flex items-center mb-4 border-b border-matrix-muted/50 pb-3">
+                    <div class="mr-4"> <i class="fas fa-clipboard-list text-matrix-green text-xl"></i> </div>
+                    <h3 class="text-lg font-bold terminal-text">使用指南</h3>
                 </div>
-                <div class="space-y-2.5 mb-5 text-matrix-green/80 text-sm">
-                    <p class="decrypt-text"><span class="font-bold mr-2">1.</span>下载软件</p>
-                    <p class="decrypt-text"><span class="font-bold mr-2">2.</span>将ID拍照发给客服</p>
-                    <p class="decrypt-text"><span class="font-bold mr-2">3.</span>等待远程协助您</p>
+                <div class="space-y-3 mb-6 text-matrix-green/80 text-sm">
+                    <p><span class="inline-block w-6 h-6 rounded-full border border-matrix-green text-center leading-5 mr-2 text-xs">1</span>下载软件</p>
+                    <p><span class="inline-block w-6 h-6 rounded-full border border-matrix-green text-center leading-5 mr-2 text-xs">2</span>将ID拍照发给客服</p>
+                    <p><span class="inline-block w-6 h-6 rounded-full border border-matrix-green text-center leading-5 mr-2 text-xs">3</span>等待远程协助您</p>
                 </div>
                 <div class="text-center">
-                    <div id="personal-wechat-trigger" class="inline-flex items-center bg-matrix-green/10 px-4 py-1.5 rounded-full text-sm terminal-text cursor-pointer hover:bg-matrix-green/20 transition"><i class="fab fa-weixin text-matrix-green mr-2"></i><span class="font-medium">点此复制微信号</span></div>
+                    <div id="personal-wechat-trigger" class="hacker-btn rounded-full inline-flex items-center px-6 py-2 text-sm terminal-text cursor-pointer hover:scale-105 transform transition"><i class="fab fa-weixin mr-2"></i><span class="font-medium">点此复制微信号</span></div>
                 </div>
             </div>
         </div>
         
-        <div class="text-center mb-12 mt-16">
-            <h2 class="text-2xl sm:text-3xl font-bold terminal-text decrypt-text">实用工具</h2>
+        <div class="text-center mb-8 mt-12 flex items-center justify-center opacity-80">
+            <span class="h-px w-12 bg-matrix-green/30 mr-4"></span>
+            <h2 class="text-2xl font-bold terminal-text">实用工具箱</h2>
+            <span class="h-px w-12 bg-matrix-green/30 ml-4"></span>
         </div>
-        <div class="grid gap-8 sm:grid-cols-1 lg:grid-cols-3 mb-12">
+        
+        <div class="grid gap-6 sm:grid-cols-1 lg:grid-cols-3 mb-12">
             
             <!-- 常用命令 -->
             <div class="hacker-card rounded-xl p-6 flex flex-col">
-                <h3 class="flex items-center mb-4">
-                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"><i class="fas fa-terminal text-matrix-green text-xl"></i></div>
+                <h3 class="flex items-center mb-4 border-b border-matrix-muted/50 pb-3">
+                    <i class="fas fa-terminal text-matrix-green mr-3 text-sm"></i>
                     <span class="text-lg font-bold terminal-text">常用命令</span>
                 </h3>
-                <div class="flex flex-col flex-grow justify-between gap-y-2.5">
-                    <div class="flex items-center gap-2">
-                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">sysdm.cpl</div>
-                        <!-- Added shrink-0 to prevent button shrinking -->
-                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm shrink-0">复制</button>
+                <div class="flex flex-col flex-grow justify-between gap-y-3">
+                    <div class="flex items-center gap-2 group">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm terminal-text truncate border border-transparent group-hover:border-matrix-green/30 transition-colors">sysdm.cpl</div>
+                        <button class="new-copy-btn hacker-btn rounded-md px-3 py-1.5 text-xs shrink-0">复制</button>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">diskmgmt.msc</div>
-                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm shrink-0">复制</button>
+                    <div class="flex items-center gap-2 group">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm terminal-text truncate border border-transparent group-hover:border-matrix-green/30 transition-colors">diskmgmt.msc</div>
+                        <button class="new-copy-btn hacker-btn rounded-md px-3 py-1.5 text-xs shrink-0">复制</button>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">powercfg.cpl</div>
-                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm shrink-0">复制</button>
+                    <div class="flex items-center gap-2 group">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm terminal-text truncate border border-transparent group-hover:border-matrix-green/30 transition-colors">powercfg.cpl</div>
+                        <button class="new-copy-btn hacker-btn rounded-md px-3 py-1.5 text-xs shrink-0">复制</button>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">msconfig</div>
-                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm shrink-0">复制</button>
+                    <div class="flex items-center gap-2 group">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm terminal-text truncate border border-transparent group-hover:border-matrix-green/30 transition-colors">msconfig</div>
+                        <button class="new-copy-btn hacker-btn rounded-md px-3 py-1.5 text-xs shrink-0">复制</button>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-3 rounded-lg font-mono text-sm terminal-text truncate border border-matrix-green/20">irm https://get.activated.win | iex</div>
-                        <button class="new-copy-btn hacker-btn whitespace-nowrap px-4 py-2 rounded-lg text-sm shrink-0">复制</button>
+                    <div class="flex items-center gap-2 group">
+                        <div class="flex-grow min-w-0 bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm terminal-text truncate border border-transparent group-hover:border-matrix-green/30 transition-colors">irm https://get.activated.win | iex</div>
+                        <button class="new-copy-btn hacker-btn rounded-md px-3 py-1.5 text-xs shrink-0">复制</button>
                     </div>
                 </div>
             </div>
 
             <!-- 信息查询 -->
             <div class="hacker-card rounded-xl p-6 flex flex-col">
-                <h3 class="flex items-center mb-4">
-                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"><i class="fas fa-info-circle text-matrix-green text-xl"></i></div>
+                <h3 class="flex items-center mb-4 border-b border-matrix-muted/50 pb-3">
+                    <i class="fas fa-info-circle text-matrix-green mr-3 text-sm"></i>
                     <span class="text-lg font-bold terminal-text">信息查询</span>
                 </h3>
-                <div class="flex flex-col flex-grow justify-between gap-y-2.5">
-                    <!-- Added font-bold for bold text -->
-                    <a href="ms-settings:about" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm font-bold terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅系统信息</a>
-                    <a href="ms-settings:themes" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm font-bold terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅主题设置</a>
-                    <a href="ms-settings:network-proxy" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm font-bold terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅代理设置</a>
-                    <a href="ms-settings:storagesense" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm font-bold terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅储存感知</a>
-                    <a href="ms-settings:recovery" class="block bg-matrix-green/5 p-3 rounded-lg font-mono text-sm font-bold terminal-text border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">✅恢复选项</a>
+                <div class="flex flex-col flex-grow justify-between gap-y-3">
+                    <a href="ms-settings:about" class="block bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm font-bold terminal-text border border-transparent hover:border-matrix-green/30 hover:bg-matrix-green/10 transition-all">✅ 系统信息</a>
+                    <a href="ms-settings:themes" class="block bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm font-bold terminal-text border border-transparent hover:border-matrix-green/30 hover:bg-matrix-green/10 transition-all">✅ 主题设置</a>
+                    <a href="ms-settings:network-proxy" class="block bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm font-bold terminal-text border border-transparent hover:border-matrix-green/30 hover:bg-matrix-green/10 transition-all">✅ 代理设置</a>
+                    <a href="ms-settings:storagesense" class="block bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm font-bold terminal-text border border-transparent hover:border-matrix-green/30 hover:bg-matrix-green/10 transition-all">✅ 储存感知</a>
+                    <a href="ms-settings:recovery" class="block bg-matrix-green/5 p-2.5 rounded-lg font-mono text-sm font-bold terminal-text border border-transparent hover:border-matrix-green/30 hover:bg-matrix-green/10 transition-all">✅ 恢复选项</a>
                 </div>
             </div>
 
-            <!-- 常用软件 -->
+            <!-- 
+                修改 3: 常用软件样式优化
+                - 恢复左对齐 (移除 pl-6)
+                - 高度调整为 h-6 (24px)，与左侧文字视觉协调
+                - 间距改为 gap-y-3
+            -->
             <div class="hacker-card rounded-xl p-6 flex flex-col">
-                <h3 class="flex items-center mb-4">
-                    <div class="p-3 rounded-lg bg-matrix-green/10 mr-4"><i class="fas fa-folder-open text-matrix-green text-xl"></i></div>
+                <h3 class="flex items-center mb-4 border-b border-matrix-muted/50 pb-3">
+                    <i class="fas fa-folder-open text-matrix-green mr-3 text-sm"></i>
                     <span class="text-lg font-bold terminal-text">常用软件</span>
                 </h3>
-                <div class="flex flex-col flex-grow justify-between gap-y-2.5">
-                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iG5A6371g9cj" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
-                        <img src="https://img.shields.io/badge/解压缩软件-点此下载-00A1E9?logo=feishu" alt="解压软件">
+                <div class="flex flex-col flex-grow justify-between gap-y-3">
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iG5A6371g9cj" target="_blank" class="block software-badge">
+                        <img src="https://img.shields.io/badge/解压缩软件-点此下载-00A1E9?logo=feishu" alt="解压软件" class="h-6 w-auto">
                     </a>
-                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iLHZK371f3kf" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
-                        <img src="https://img.shields.io/badge/卸载工具包-点此下载-00A1E9?logo=feishu" alt="卸载软件">
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iLHZK371f3kf" target="_blank" class="block software-badge">
+                        <img src="https://img.shields.io/badge/卸载工具包-点此下载-00A1E9?logo=feishu" alt="卸载软件" class="h-6 w-auto">
                     </a>
-                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iXnjY1ykoo5e" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
-                        <img src="https://img.shields.io/badge/小箭头去除-点此下载-00A1E9?logo=feishu" alt="小箭头去除">
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iXnjY1ykoo5e" target="_blank" class="block software-badge">
+                        <img src="https://img.shields.io/badge/小箭头去除-点此下载-00A1E9?logo=feishu" alt="小箭头去除" class="h-6 w-auto">
                     </a>
-                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iNZOo320ywyb" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
-                        <img src="https://img.shields.io/badge/win11右键-点此下载-00A1E9?logo=feishu" alt="win11右键">
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iNZOo320ywyb" target="_blank" class="block software-badge">
+                        <img src="https://img.shields.io/badge/win11右键-点此下载-00A1E9?logo=feishu" alt="win11右键" class="h-6 w-auto">
                     </a>
-                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/ijEfZ3aqkhuh" target="_blank" class="block bg-matrix-green/5 p-2 rounded-lg border border-matrix-green/20 hover:bg-matrix-green/10 transition-colors">
-                        <img src="https://img.shields.io/badge/Hosts修改-点此下载-00A1E9?logo=feishu" alt="Hosts修改">
+                    <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/ijEfZ3aqkhuh" target="_blank" class="block software-badge">
+                        <img src="https://img.shields.io/badge/Hosts修改-点此下载-00A1E9?logo=feishu" alt="Hosts修改" class="h-6 w-auto">
                     </a>
                 </div>
             </div>
@@ -268,81 +287,84 @@
         </div>
 
         <!-- Social Media Section -->
-        <div class="text-center mb-12 mt-16">
-            <h2 class="text-2xl sm:text-3xl font-bold terminal-text decrypt-text">我的社交媒体</h2>
+        <div class="text-center mb-8 mt-12 flex items-center justify-center opacity-80">
+            <span class="h-px w-12 bg-matrix-green/30 mr-4"></span>
+            <h2 class="text-2xl font-bold terminal-text">我的社交媒体</h2>
+            <span class="h-px w-12 bg-matrix-green/30 ml-4"></span>
         </div>
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 mb-12">
-            <!-- WeChat Public Account Card -->
-            <div id="wechat-public-trigger" class="hacker-card rounded-xl p-6 text-center cursor-pointer">
-                <div class="mb-4"><i class="fab fa-weixin text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">微信公众号</h3>
-                <p class="text-sm text-matrix-green/80">大强同学</p>
+        
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+            
+            <div id="wechat-public-trigger" class="hacker-card rounded-xl p-6 text-center cursor-pointer hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fab fa-weixin text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">微信公众号</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">大强同学</p>
             </div>
 
-            <!-- GitHub Card -->
-            <a href="https://github.com/dqtx760" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fab fa-github text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">GitHub</h3>
-                <p class="text-sm text-matrix-green/80">dqtx760</p>
+            <a href="https://github.com/dqtx760" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fab fa-github text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">GitHub</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">dqtx760</p>
             </a>
 
-            <!-- Twitter Card -->
-            <a href="https://x.com/dqtx760" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fab fa-twitter text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">Twitter</h3>
-                <p class="text-sm text-matrix-green/80">@dqtx760</p>
+            <a href="https://x.com/dqtx760" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fab fa-twitter text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">Twitter</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">@dqtx760</p>
+            </a>
+            
+             <a href="https://space.bilibili.com/491358682/upload/video" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fab fa-bilibili text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">B站</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">大强同学</p>
             </a>
 
-            <!-- Jike Card -->
-            <a href="https://yishijie.gitlab.io/ziyuan/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fas fa-hashtag text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">git加速</h3>
-                <p class="text-sm text-matrix-green/80">大强同学</p>
+            <!-- Git加速 -->
+            <a href="https://yishijie.gitlab.io/ziyuan/" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fas fa-hashtag text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">Git加速</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">大强同学</p>
             </a>
 
-            <!-- CSDN Card -->
-            <a href="https://blog.csdn.net/2402_82616859?type=blog" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fas fa-blog text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">CSDN</h3>
-                <p class="text-sm text-matrix-green/80">大强同学</p>
+            <!-- CSDN -->
+            <a href="https://blog.csdn.net/2402_82616859?type=blog" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fas fa-blog text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">CSDN</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">大强同学</p>
             </a>
 
-            <!-- Douyin Card -->
-            <a href="https://www.douyin.com/user/self?from_tab_name=main" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fab fa-tiktok text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">抖音</h3>
-                <p class="text-sm text-matrix-green/80">大强同学</p>
+            <!-- 抖音 -->
+            <a href="https://www.douyin.com/user/self?from_tab_name=main" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fab fa-tiktok text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">抖音</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">大强同学</p>
             </a>
 
-            <!-- Xiaohongshu Card -->
-            <a href="https://xhslink.com/m/FmNz8HvIPH" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fas fa-book-open text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">小红书</h3>
-                <p class="text-sm text-matrix-green/80">大强同学</p>
+            <!-- 小红书 -->
+            <a href="https://xhslink.com/m/FmNz8HvIPH" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block hover:bg-matrix-green group transition">
+                <div class="mb-3"><i class="fas fa-book-open text-3xl terminal-text group-hover:text-black transition-colors"></i></div>
+                <h3 class="text-base font-bold terminal-text mb-1 group-hover:text-black transition-colors">小红书</h3>
+                <p class="text-xs text-matrix-green/70 group-hover:text-black transition-colors">大强同学</p>
             </a>
-
-            <!-- Bilibili Card -->
-            <a href="https://space.bilibili.com/491358682/upload/video" target="_blank" rel="noopener noreferrer" class="hacker-card rounded-xl p-6 text-center block">
-                <div class="mb-4"><i class="fab fa-bilibili text-3xl terminal-text"></i></div>
-                <h3 class="text-lg font-bold terminal-text mb-2">B站</h3>
-                <p class="text-sm text-matrix-green/80">大强同学</p>
-            </a>
+            
         </div>
     </main>
 
-    <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-matrix-green/20 text-center text-sm terminal-text opacity-70">
-        <p class="decrypt-text">© 2025 大强远程支持. 提供专业、可信赖的远程技术服务！</p>
+    <footer class="py-8 px-4 sm:px-6 lg:px-8 border-t border-matrix-muted/30 text-center text-sm terminal-text opacity-60">
+        <p>© 2025 大强远程支持. 提供专业、可信赖的远程技术服务！</p>
     </footer>
 
     <!-- QR Code Modal -->
-    <div id="qr-modal" class="fixed inset-0 bg-matrix-dark/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
-        <div id="modal-content" class="hacker-card rounded-xl p-6 sm:p-8 text-center max-w-xs w-full transition-transform duration-300 scale-95" style="transform: scale(0.95);">
+    <div id="qr-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div id="modal-content" class="hacker-card rounded-2xl p-6 sm:p-8 text-center max-w-xs w-full transition-transform duration-300 scale-95" style="transform: scale(0.95);">
             <h3 id="modal-title" class="text-lg font-bold mb-4 flex items-center justify-center terminal-text"></h3>
-            <div class="mx-auto"><img id="modal-image" src="" alt="QR Code" class="mb-3 bg-white p-2 rounded-lg" loading="lazy"></div>
-            <p id="modal-description" class="text-sm terminal-text opacity-70 mb-5"></p>
+            <div class="mx-auto border border-matrix-green/50 p-1 mb-4 inline-block rounded-lg">
+                <img id="modal-image" src="" alt="QR Code" class="bg-white p-2 rounded" loading="lazy">
+            </div>
+            <p id="modal-description" class="text-sm terminal-text opacity-70 mb-6"></p>
             <div class="flex items-center justify-center gap-4">
-                <button id="modal-copy-button" class="hacker-btn inline-block py-2 px-5 font-semibold rounded-lg text-sm">复制微信号</button>
-                <button id="modal-close-button" class="hacker-btn primary inline-block py-2 px-5 font-semibold rounded-lg text-sm">关闭</button>
+                <button id="modal-copy-button" class="hacker-btn rounded-lg inline-block py-2 px-5 text-sm">复制微信号</button>
+                <button id="modal-close-button" class="hacker-btn primary rounded-lg inline-block py-2 px-5 text-sm">关闭</button>
             </div>
         </div>
     </div>
@@ -350,17 +372,12 @@
     <div id="toast-notification"></div>
 
     <script>
-        // --- Clipboard & Toast Logic ---
         function showToast(message) {
             const toast = document.getElementById('toast-notification');
             if (!toast) return;
-            
-            toast.textContent = message;
+            toast.textContent = ">> " + message;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2000);
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
         }
 
         async function copyToClipboard(text) {
@@ -370,13 +387,9 @@
                 } else {
                     const textArea = document.createElement("textarea");
                     textArea.value = text;
-                    textArea.style.position = "fixed";
-                    textArea.style.opacity = "0";
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    document.execCommand("copy");
-                    document.body.removeChild(textArea);
+                    textArea.style.position = "fixed"; textArea.style.opacity = "0";
+                    document.body.appendChild(textArea); textArea.focus(); textArea.select();
+                    document.execCommand("copy"); document.body.removeChild(textArea);
                 }
                 showToast("已复制到剪贴板！");
             } catch (error) {
@@ -385,115 +398,47 @@
             }
         }
 
-
         document.addEventListener('DOMContentLoaded', () => {
-            // --- 纯绿色代码雨脚本 ---
             const canvas = document.getElementById('background-canvas');
             const ctx = canvas.getContext('2d');
-            
-            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const nums = '0123456789';
-            const chars = katakana + latin + nums;
-
-            const fontSize = 14;
-            let columns, drops;
-
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                columns = Math.floor(canvas.width / fontSize);
-                drops = [];
-                for (let i = 0; i < columns; i++) {
-                    drops[i] = 1;
-                }
+            function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drawGrid(); }
+            function drawGrid() {
+                if (!ctx) return;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = 'rgba(51, 255, 0, 0.1)'; ctx.lineWidth = 1;
+                const gridSize = 40;
+                for (let x = 0; x <= canvas.width; x += gridSize) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke(); }
+                for (let y = 0; y <= canvas.height; y += gridSize) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke(); }
             }
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
 
-            function drawMatrixRain() {
-                ctx.fillStyle = 'rgba(11, 11, 11, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = '#00ff41';
-                ctx.font = `${fontSize}px 'Share Tech Mono'`;
-                
-                for (let i = 0; i < drops.length; i++) {
-                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                    const x = i * fontSize;
-                    const y = drops[i] * fontSize;
-                    
-                    ctx.fillText(text, x, y);
-
-                    if (y > canvas.height && Math.random() > 0.99) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            setInterval(drawMatrixRain, 50);
-
-            // 文本解密
-            const decryptElements = document.querySelectorAll('.decrypt-text');
-            const randomChars = '`¡™£¢∞§¶•ªº–≠⁄€‹›ﬁﬂ‡°·‚—±!@#$%^&*()_+-=[]{}|;:,.<>?';
-            decryptElements.forEach(el => {
-                const originalText = el.textContent.trim();
-                let iteration = 0;
-                const interval = setInterval(() => {
-                    el.textContent = originalText.split('').map((char, index) => (index < iteration) ? originalText[index] : (char === ' ') ? ' ' : randomChars[Math.floor(Math.random() * randomChars.length)]).join('');
-                    if(iteration >= originalText.length) clearInterval(interval);
-                    iteration += 1 / 3;
-                }, 30);
-            });
-            
-            // 音效与扫描系统
             let isAudioUnlocked = false;
-            function unlockAudio() {
-                if (isAudioUnlocked) return;
-                zzfx.getContext().resume().then(() => { isAudioUnlocked = true; });
-            }
-            ['click', 'mousemove', 'keydown', 'touchstart'].forEach(eventName => 
-                window.addEventListener(eventName, unlockAudio, { once: true })
-            );
+            function unlockAudio() { if (isAudioUnlocked) return; zzfx.getContext().resume().then(() => { isAudioUnlocked = true; }); }
+            ['click', 'mousemove', 'keydown', 'touchstart'].forEach(eventName => window.addEventListener(eventName, unlockAudio, { once: true }));
 
             const downloadButton = document.getElementById('download-button');
             const dingSound = [,,523.25,.02,.02,.1,2,.1,,-0.1,,,,,.1,,.02,.13,.01];
-            if (downloadButton) {
-                downloadButton.addEventListener('click', () => {
-                    if (isAudioUnlocked) zzfx(...dingSound);
-                });
-            }
+            if (downloadButton) { downloadButton.addEventListener('click', () => { if (isAudioUnlocked) zzfx(...dingSound); }); }
             
             const scanButton = document.getElementById('scan-trigger-button');
-            const header = document.getElementById('main-header');
-            const scanSound = [1.5,.5,250,.03,.1,.2,1,1.5,,,,,.2,,.1,,.8,.05]; 
-
-            if(scanButton && header) {
+            if(scanButton) {
                 scanButton.addEventListener('click', () => {
+                    const scanSound = [1.5,.5,250,.03,.1,.2,1,1.5,,,,,.2,,.1,,.8,.05]; 
                     if (isAudioUnlocked) zzfx(...scanSound);
-                    header.classList.remove('scanning');
-                    void header.offsetWidth;
-                    header.classList.add('scanning');
                 });
             }
 
-            // --- Logic for "实用工具" Copy Buttons ---
             document.querySelectorAll('.new-copy-btn').forEach(button => {
                 button.addEventListener('click', () => {
-                    // We need the full text for copying, which is stored in a data attribute
                     const textToCopy = button.previousElementSibling.textContent.trim();
-                    if (textToCopy === 'irm https://get.activated.win |...') {
-                         copyToClipboard('irm https://get.activated.win | iex');
-                    } else {
-                         copyToClipboard(textToCopy);
-                    }
+                    if (textToCopy.startsWith('irm')) { copyToClipboard('irm https://get.activated.win | iex'); } 
+                    else { copyToClipboard(textToCopy); }
                     if (isAudioUnlocked) zzfx(...dingSound);
                 });
             });
             
-            // --- QR Code Modal Logic ---
             const modal = document.getElementById('qr-modal');
-            const modalContent = document.getElementById('modal-content');
             const modalTitle = document.getElementById('modal-title');
             const modalImage = document.getElementById('modal-image');
             const modalDescription = document.getElementById('modal-description');
@@ -501,59 +446,29 @@
             const modalCopyButton = document.getElementById('modal-copy-button');
 
             function showQrModal(title, imageUrl, description, copyText = null) {
-                modalTitle.textContent = title;
-                modalImage.src = imageUrl;
-                modalImage.alt = title;
-                modalDescription.textContent = description;
-
-                if (copyText) {
-                    modalCopyButton.style.display = 'inline-block';
-                    modalCopyButton.dataset.copyText = copyText;
-                } else {
-                    modalCopyButton.style.display = 'none';
-                }
-
+                modalTitle.textContent = title; modalImage.src = imageUrl; modalImage.alt = title; modalDescription.textContent = description;
+                if (copyText) { modalCopyButton.style.display = 'inline-block'; modalCopyButton.dataset.copyText = copyText; } 
+                else { modalCopyButton.style.display = 'none'; }
                 modal.classList.add('visible');
             }
-
-            function hideQrModal() {
-                modal.classList.remove('visible');
-            }
+            function hideQrModal() { modal.classList.remove('visible'); }
 
             modalCloseButton.addEventListener('click', hideQrModal);
-            modal.addEventListener('click', (e) => {
-                if (!modalContent.contains(e.target)) {
-                    hideQrModal();
-                }
-            });
+            modal.addEventListener('click', (e) => { if (!document.getElementById('modal-content').contains(e.target)) hideQrModal(); });
             modalCopyButton.addEventListener('click', () => {
-                const textToCopy = modalCopyButton.dataset.copyText;
-                if (textToCopy) {
-                    copyToClipboard(textToCopy);
-                }
+                const text = modalCopyButton.dataset.copyText; if (text) copyToClipboard(text);
             });
 
-            // --- Trigger Listeners ---
             const personalWechatTrigger = document.getElementById('personal-wechat-trigger');
             if (personalWechatTrigger) {
                 personalWechatTrigger.addEventListener('click', () => {
-                    showQrModal(
-                        '博主微信', 
-                        'https://gitee.com/da-qiang-classmate/typora/raw/master/image/e3877f44-ceca-4ded-86b5-1a0a15c7927b.webp', 
-                        '微信号: dqtx33',
-                        'dqtx33'
-                    );
+                    showQrModal('博主微信', 'https://gitee.com/da-qiang-classmate/typora/raw/master/image/e3877f44-ceca-4ded-86b5-1a0a15c7927b.webp', '微信号: dqtx33', 'dqtx33');
                 });
             }
-
             const wechatPublicTrigger = document.getElementById('wechat-public-trigger');
             if (wechatPublicTrigger) {
                 wechatPublicTrigger.addEventListener('click', () => {
-                    showQrModal(
-                        '微信公众号', 
-                        'https://gitee.com/da-qiang-classmate/typora/raw/master/image/687df59c-f85e-4a5f-ab35-cf86112e87fd.webp', 
-                        '扫码关注「大强同学」'
-                    );
+                    showQrModal('微信公众号', 'https://gitee.com/da-qiang-classmate/typora/raw/master/image/687df59c-f85e-4a5f-ab35-cf86112e87fd.webp', '扫码关注「大强同学」');
                 });
             }
         });
