@@ -102,8 +102,8 @@
         }
 
         /* Modal Styles */
-        #qr-modal.visible { opacity: 1; pointer-events: auto; }
-        #qr-modal.visible #modal-content { transform: scale(1); }
+        #qr-modal.visible, #download-modal.visible { opacity: 1; pointer-events: auto; }
+        #qr-modal.visible #modal-content, #download-modal.visible .hacker-card { transform: scale(1); }
         
         /* Toast */
         #toast-notification {
@@ -172,16 +172,16 @@
             <div class="hacker-card rounded-xl p-6">
                 <div class="flex items-center mb-4 border-b border-matrix-muted/50 pb-3">
                     <div class="mr-4"> <i class="fas fa-download text-matrix-green text-xl"></i> </div>
-                    <h3 class="text-lg font-bold terminal-text">RustDesk远程</h3>
+                    <h3 class="text-lg font-bold terminal-text">远程客户端下载</h3>
                 </div>
                 <ul class="space-y-3 mb-6 text-matrix-green/80 text-sm">
                     <li class="flex items-start"><i class="fas fa-check-circle text-matrix-green mt-0.5 mr-2"></i><span>支持Windows7/10/11及更高版本</span></li>
                     <li class="flex items-start"><i class="fas fa-shield-halved text-matrix-green mt-0.5 mr-2"></i><span>全程安全加密，隐私无忧</span></li>
                 </ul>
                 <div class="mt-4 pt-2 text-center">
-                    <a href="https://lz.qaiu.top/parser?url=https://wwbxq.lanzouq.com/iB4pV3a15fbg" target="_blank" id="download-button" class="hacker-btn rounded-lg inline-block py-2.5 px-8 text-sm w-full sm:w-auto hover:scale-105 transform transition">
+                    <button id="download-button" class="hacker-btn rounded-lg inline-block py-2.5 px-8 text-sm w-full sm:w-auto hover:scale-105 transform transition">
                         立即下载 <i class="fas fa-arrow-down ml-1"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
             
@@ -368,6 +368,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Download Selection Modal -->
+    <div id="download-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="hacker-card rounded-2xl p-6 sm:p-8 text-center max-w-sm w-full transition-transform duration-300 scale-95" style="transform: scale(0.95);">
+            <h3 class="text-lg font-bold mb-6 flex items-center justify-center terminal-text">请选择远程客户端</h3>
+            <div class="space-y-4 mb-6">
+                <a href="https://lz.qaiu.top/parser?url=https://wwbxq.lanzouq.com/iB4pV3a15fbg" target="_blank" class="hacker-btn rounded-lg block py-3 px-6 text-sm w-full hover:scale-105 transform transition download-option">
+                    <i class="fas fa-download mr-2"></i> RustDesk 远程
+                </a>
+                <a href="https://wwbxq.lanzouq.com/ijNPQ382nuqd" target="_blank" class="hacker-btn rounded-lg block py-3 px-6 text-sm w-full hover:scale-105 transform transition download-option">
+                    <i class="fas fa-sun mr-2"></i> 向日葵远程
+                </a>
+                <a href="https://www.todesk.com/download.html" target="_blank" class="hacker-btn rounded-lg block py-3 px-6 text-sm w-full hover:scale-105 transform transition download-option">
+                    <i class="fas fa-desktop mr-2"></i> ToDesk 远程
+                </a>
+            </div>
+            <div class="flex items-center justify-center">
+                <button id="download-modal-close" class="hacker-btn rounded-lg inline-block py-2 px-8 text-sm">关闭</button>
+            </div>
+        </div>
+    </div>
     
     <div id="toast-notification"></div>
 
@@ -418,8 +439,43 @@
             ['click', 'mousemove', 'keydown', 'touchstart'].forEach(eventName => window.addEventListener(eventName, unlockAudio, { once: true }));
 
             const downloadButton = document.getElementById('download-button');
+            const downloadModal = document.getElementById('download-modal');
+            const downloadModalClose = document.getElementById('download-modal-close');
             const dingSound = [,,523.25,.02,.02,.1,2,.1,,-0.1,,,,,.1,,.02,.13,.01];
-            if (downloadButton) { downloadButton.addEventListener('click', () => { if (isAudioUnlocked) zzfx(...dingSound); }); }
+
+            function showDownloadModal() {
+                downloadModal.classList.add('visible');
+                downloadModal.style.pointerEvents = 'auto';
+            }
+
+            function hideDownloadModal() {
+                downloadModal.classList.remove('visible');
+                downloadModal.style.pointerEvents = 'none';
+            }
+
+            if (downloadButton) {
+                downloadButton.addEventListener('click', () => {
+                    if (isAudioUnlocked) zzfx(...dingSound);
+                    showDownloadModal();
+                });
+            }
+
+            if (downloadModalClose) {
+                downloadModalClose.addEventListener('click', hideDownloadModal);
+            }
+
+            downloadModal.addEventListener('click', (e) => {
+                if (!e.target.closest('.hacker-card')) {
+                    hideDownloadModal();
+                }
+            });
+
+            document.querySelectorAll('.download-option').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (isAudioUnlocked) zzfx(...dingSound);
+                    hideDownloadModal();
+                });
+            });
             
             const scanButton = document.getElementById('scan-trigger-button');
             if(scanButton) {
