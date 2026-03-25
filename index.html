@@ -105,14 +105,14 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        。glass-card:hover {
+        .glass-card:hover {
             border-color: rgba(0, 229, 255, 0.3);
             transform: translateY(-4px);
             box-shadow: 0 16px 48px rgba(0, 229, 255, 0.15);
         }
 
         /* 按钮样式 */
-        。btn-primary {
+        .btn-primary {
             background: linear-gradient(135deg, #00E5FF 0%, #7B61FF 100%);
             border: none;
             color: #0A0E17;
@@ -217,7 +217,7 @@
             filter: drop-shadow(0 4px 8px rgba(0, 229, 255, 0.3));
         }
 
-        。command-box {
+        .command-box {
             background: rgba(26, 32, 44, 0.8);
             border: 1px solid rgba(0, 229, 255, 0.1);
             border-radius: 8px;
@@ -601,7 +601,7 @@
             const toast = document.getElementById('toast-notification');
             if (!toast) return;
             toast.textContent = message;
-            toast。classList.add('show');
+            toast.classList.add('show');
             setTimeout(() => { toast.classList.remove('show'); }, 2000);
         }
 
