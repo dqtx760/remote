@@ -342,7 +342,7 @@
                 </p>
                 <div class="flex flex-wrap gap-4 mb-6">
                     <button id="download-button" class="btn-primary px-8 py-3 text-base">
-                        <i class="fas fa-download mr-2"></i> 下载安全客户端
+                        <i class="fas fa-download mr-2"></i> 下载连连控
                     </button>
                     <button id="personal-wechat-trigger-hero" class="btn-secondary px-8 py-3 text-base">
                         <i class="fab fa-weixin mr-2"></i> 联系技术支持
@@ -669,12 +669,13 @@
             ['click', 'mousemove', 'keydown', 'touchstart'].forEach(eventName => window.addEventListener(eventName, unlockAudio, { once: true }));
 
             // Hero区域按钮事件
+            const asklinkDownloadUrl = 'https://www.asklink.com/zh-CN/download/personal';
             const heroDownloadBtn = document.getElementById('download-button');
             const heroWechatBtn = document.getElementById('personal-wechat-trigger-hero');
             if (heroDownloadBtn) {
                 heroDownloadBtn.addEventListener('click', () => {
                     if (isAudioUnlocked) zzfx(...dingSound);
-                    showDownloadModal();
+                    window.location.href = asklinkDownloadUrl;
                 });
             }
             if (heroWechatBtn) {
@@ -703,7 +704,7 @@
             if (downloadButton) {
                 downloadButton.addEventListener('click', () => {
                     if (isAudioUnlocked) zzfx(...dingSound);
-                    showDownloadModal();
+                    window.location.href = asklinkDownloadUrl;
                 });
             }
 
