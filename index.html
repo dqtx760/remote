@@ -8,13 +8,6 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- 优化重点：预加载二维码图片，解决点击后延迟显示的问题 -->
-    <link rel="preload" as="image" href="https://gitee.com/da-qiang-classmate/typora/raw/master/image/e3877f44-ceca-4ded-86b5-1a0a15c7927b.webp">
-    <link rel="preload" as="image" href="https://gitee.com/da-qiang-classmate/typora/raw/master/image/687df59c-f85e-4a5f-ab35-cf86112e87fd.webp">
-
-    <script src="https://unpkg.com/zzfx@2.0.3/zzfx.js"></script>
 
     <script>
         tailwind.config = {
@@ -22,7 +15,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
                     },
                     colors: {
                         primary: {
@@ -260,6 +253,28 @@
             filter: drop-shadow(0 4px 8px rgba(0, 229, 255, 0.3));
         }
 
+        .tool-badge {
+            display: inline-flex;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 5px;
+            font-size: 12px;
+            line-height: 20px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .tool-badge-label {
+            background: #555;
+            color: #fff;
+            padding: 0 7px;
+        }
+        .tool-badge-action {
+            color: #0A0E17;
+            padding: 0 7px;
+        }
+        .tool-badge-green { background: #b7f605; }
+        .tool-badge-blue { background: #00E5FF; }
+
         .command-box {
             background: rgba(26, 32, 44, 0.8);
             border: 1px solid rgba(0, 229, 255, 0.1);
@@ -379,9 +394,9 @@
         <!-- Hero 区域 -->
         <div class="grid md:grid-cols-2 gap-12 items-start mb-16">
             <div class="flex flex-col h-full">
-                <h2 class="text-4xl sm:text-5xl font-bold mb-6 leading-[1.18]">
-                    安全可靠的<br>
-                    <span class="gradient-text">电脑维修服务</span>
+                <h2 class="font-bold mb-6 leading-[1.2]">
+                    <span class="block text-3xl sm:text-4xl font-serif tracking-wide">安全可靠的</span>
+                    <span class="block text-4xl sm:text-5xl gradient-text mt-1">电脑维修服务</span>
                 </h2>
                 <p class="text-gray-300 text-lg mb-8 max-w-lg">
                     提供重装系统、C盘扩容、DLL修复、软件安装、X99鸡血BIOS等远程技术支持，解决您的各类电脑问题。
@@ -451,11 +466,11 @@
         <div class="grid lg:grid-cols-[0.95fr_1fr] gap-10 items-stretch mb-12">
             <div class="lg:order-2">
                 <div class="mb-8 text-center">
-                    <h2 class="text-3xl sm:text-4xl font-bold gradient-text mb-3">提供专属服务</h2>
                     <div class="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/10 px-4 py-1.5 text-base font-semibold text-primary shadow-[0_0_24px_rgba(0,229,255,0.12)] mb-3">
                         <span class="h-2 w-2 rounded-full bg-primary shadow-[0_0_12px_rgba(0,229,255,0.8)]"></span>
                         为不同的客户
                     </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold gradient-text mb-3">提供专属服务</h2>
                     <p class="text-gray-400 leading-relaxed max-w-2xl mx-auto">无论是系统崩溃、软件安装报错崩溃、游戏打开 DLL 报错，还是 C 盘爆红，都可以按你的实际情况，我们都能为您提供量身定制的解决方案。</p>
                 </div>
                 <div class="grid sm:grid-cols-2 gap-4">
@@ -606,19 +621,19 @@
                 </h3>
                 <div class="flex flex-col flex-grow justify-between gap-y-3">
                     <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iG5A6371g9cj" target="_blank" class="block software-badge">
-                        <img src="https://img.shields.io/badge/解压缩软件-点此下载-b7f605?logo=feishu&logoColor=black" alt="解压软件" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">📦 解压缩软件</span><span class="tool-badge-action tool-badge-green">下载</span></span>
                     </a>
                     <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iLHZK371f3kf" target="_blank" class="block software-badge">
-                        <img src="https://img.shields.io/badge/卸载工具包-点此下载-b7f605?logo=feishu&logoColor=black" alt="卸载软件" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">🧹 卸载工具包</span><span class="tool-badge-action tool-badge-green">下载</span></span>
                     </a>
                     <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iXnjY1ykoo5e" target="_blank" class="block software-badge">
-                        <img src="https://img.shields.io/badge/小箭头去除-点此下载-b7f605?logo=feishu&logoColor=black" alt="小箭头去除" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">🏹 小箭头去除</span><span class="tool-badge-action tool-badge-green">下载</span></span>
                     </a>
                     <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/iNZOo320ywyb" target="_blank" class="block software-badge">
-                        <img src="https://img.shields.io/badge/win11右键-点此下载-b7f605?logo=feishu&logoColor=black" alt="win11右键" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">🖱️ win11右键</span><span class="tool-badge-action tool-badge-green">下载</span></span>
                     </a>
                     <a href="https://lz.qaiu.top/parser?url=https://wwzq.lanzouq.com/ijEfZ3aqkhuh" target="_blank" class="block software-badge">
-                        <img src="https://img.shields.io/badge/Hosts修改-点此下载-b7f605?logo=feishu&logoColor=black" alt="Hosts修改" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">🧩 Hosts修改</span><span class="tool-badge-action tool-badge-green">下载</span></span>
                     </a>
                 </div>
             </div>
@@ -631,19 +646,19 @@
                 </h3>
                 <div class="flex flex-col flex-grow justify-between gap-y-3">
                     <a href="https://github.com/QL-Win/QuickLook/releases" target="_blank" rel="noopener noreferrer" class="block software-badge">
-                        <img src="https://img.shields.io/badge/快速预览工具-点此下载-00E5FF?logo=feishu" alt="QuickLook" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">👁️ 快速预览工具</span><span class="tool-badge-action tool-badge-blue">下载</span></span>
                     </a>
                     <a href="https://www.listary.net/" target="_blank" rel="noopener noreferrer" class="block software-badge">
-                        <img src="https://img.shields.io/badge/快速搜索工具-点此下载-00E5FF?logo=feishu" alt="Listary" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">🔍 快速搜索工具</span><span class="tool-badge-action tool-badge-blue">下载</span></span>
                     </a>
                     <a href="https://otp.landian.vip/zh-cn/download.html" target="_blank" rel="noopener noreferrer" class="block software-badge">
-                        <img src="https://img.shields.io/badge/办公安装工具-点此下载-00E5FF?logo=feishu" alt="Office Tool" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">📄 办公安装工具</span><span class="tool-badge-action tool-badge-blue">下载</span></span>
                     </a>
                     <a href="https://feishu.doubao.com/drive/file/CeHtbxqMHoaj8mxGIdec4smMndc" target="_blank" rel="noopener noreferrer" class="block software-badge">
-                        <img src="https://img.shields.io/badge/游戏运行组件-点此下载-00E5FF?logo=feishu" alt="DirectX" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">🎮 游戏运行组件</span><span class="tool-badge-action tool-badge-blue">下载</span></span>
                     </a>
                     <a href="https://wwbxq.lanzouq.com/iwufe2znplcj" target="_blank" rel="noopener noreferrer" class="block software-badge">
-                        <img src="https://img.shields.io/badge/流氓软件查杀-点此下载-00E5FF?logo=feishu" alt="流氓软件查杀" class="h-5 w-auto">
+                        <span class="tool-badge"><span class="tool-badge-label">🛡️ 流氓软件查杀</span><span class="tool-badge-action tool-badge-blue">下载</span></span>
                     </a>
                 </div>
             </div>
@@ -781,18 +796,12 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            let isAudioUnlocked = false;
-            function unlockAudio() { if (isAudioUnlocked) return; zzfx.getContext().resume().then(() => { isAudioUnlocked = true; }); }
-            ['click', 'mousemove', 'keydown', 'touchstart'].forEach(eventName => window.addEventListener(eventName, unlockAudio, { once: true }));
-
             // Hero区域按钮事件
             const asklinkDownloadUrl = 'https://www.asklink.com/zh-CN/download/personal';
             const heroDownloadBtn = document.getElementById('download-button');
             const heroWechatBtn = document.getElementById('personal-wechat-trigger-hero');
-            const dingSound = [,,523.25,.02,.02,.1,2,.1,,-0.1,,,,,.1,,.02,.13,.01];
             if (heroDownloadBtn) {
                 heroDownloadBtn.addEventListener('click', () => {
-                    if (isAudioUnlocked) zzfx(...dingSound);
                     window.location.href = asklinkDownloadUrl;
                 });
             }
@@ -802,26 +811,11 @@
                 });
             }
 
-            document.querySelectorAll('.download-option').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (isAudioUnlocked) zzfx(...dingSound);
-                });
-            });
-
-            const scanButton = document.getElementById('scan-trigger-button');
-            if(scanButton) {
-                scanButton.addEventListener('click', () => {
-                    const scanSound = [1.5,.5,250,.03,.1,.2,1,1.5,,,,,.2,,.1,,.8,.05];
-                    if (isAudioUnlocked) zzfx(...scanSound);
-                });
-            }
-
             document.querySelectorAll('.new-copy-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const textToCopy = button.previousElementSibling.textContent.trim();
                     if (textToCopy.startsWith('irm')) { copyToClipboard('irm https://get.activated.win | iex'); }
                     else { copyToClipboard(textToCopy); }
-                    if (isAudioUnlocked) zzfx(...dingSound);
                 });
             });
 
